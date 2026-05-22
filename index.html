@@ -627,6 +627,7 @@ tbody td {
   </div>
 
   <!-- CHARTS ROW 1 -->
+<!-- CHARTS ROW 1 -->
   <div class="sec-head">
     <div class="sec-head-title">Financial Overview</div>
     <div class="sec-head-line"></div>
@@ -636,12 +637,16 @@ tbody td {
     <div class="chart-card">
       <div class="chart-title">Annual Funding Disbursement</div>
       <div class="chart-sub">Total sanctioned amount per year (INR Lakhs)</div>
-      <canvas id="cFundYear" height="200"></canvas>
+      <div style="position:relative; height:220px;">
+        <canvas id="cFundYear"></canvas>
+      </div>
     </div>
     <div class="chart-card">
       <div class="chart-title">Project Volume by Year</div>
       <div class="chart-sub">Number of projects sanctioned each year</div>
-      <canvas id="cProjYear" height="200"></canvas>
+      <div style="position:relative; height:220px;">
+        <canvas id="cProjYear"></canvas>
+      </div>
     </div>
   </div>
 
@@ -655,17 +660,23 @@ tbody td {
     <div class="chart-card">
       <div class="chart-title">Top 10 Departments by Projects</div>
       <div class="chart-sub">Count of projects per department</div>
-      <canvas id="cDeptCount" height="250"></canvas>
+      <div style="position:relative; height:320px;">
+        <canvas id="cDeptCount"></canvas>
+      </div>
     </div>
     <div class="chart-card">
       <div class="chart-title">Top 10 Departments by Funding</div>
       <div class="chart-sub">Total fund sanctioned (INR Lakhs)</div>
-      <canvas id="cDeptFund" height="250"></canvas>
+      <div style="position:relative; height:320px;">
+        <canvas id="cDeptFund"></canvas>
+      </div>
     </div>
     <div class="chart-card">
       <div class="chart-title">Top 15 Principal Investigators</div>
       <div class="chart-sub">Cumulative fund approved (INR Lakhs)</div>
-      <canvas id="cPI" height="250"></canvas>
+      <div style="position:relative; height:320px;">
+        <canvas id="cPI"></canvas>
+      </div>
     </div>
   </div>
 
@@ -805,7 +816,43 @@ async function loadData(isRefresh) {
   setLoader(30, 'Fetching project records…');
 
   try {
-    const json = await fetchJSONP(APPS_SCRIPT_URL + '?action=all');
+    const json = await new Promise((resolve, reject) => {
+      const cbName = 'cb_' + Math.floor(Math.random() * 1e10);
+      const script = document.createElement('script');
+      let done = false;
+
+      const timer = setTimeout(() => {
+        if (done) return;
+        done = true;
+        cleanup();
+        reject(new Error('Request timed out after 15s'));
+      }, 15000);
+
+      window[cbName] = function(data) {
+        if (done) return;
+        done = true;
+        cleanup();
+        resolve(data);
+      };
+
+      function cleanup() {
+        clearTimeout(timer);
+        delete window[cbName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      script.onerror = function() {
+        if (done) return;
+        done = true;
+        cleanup();
+        reject(new Error('Failed to load script'));
+      };
+
+      // Key fix: no cache-busting parameter that breaks Apps Script redirect
+      script.src = APPS_SCRIPT_URL + '?action=all&callback=' + cbName;
+      document.body.appendChild(script); // append to body not head
+    });
+
     if (json.error) throw new Error(json.error);
 
     ALL = json.projects || [];
@@ -818,8 +865,8 @@ async function loadData(isRefresh) {
 
     const t = new Date();
     document.getElementById('lastSync').textContent =
-      'Last updated ' + t.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) +
-      ' at ' + t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+      'Last updated ' + t.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) +
+      ' at ' + t.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
     setTimeout(hideLoader, 380);
     if (isRefresh) toast('Data refreshed — ' + ALL.length + ' projects loaded');
@@ -828,15 +875,13 @@ async function loadData(isRefresh) {
     hideLoader();
     const b = document.getElementById('errorBanner');
     b.innerHTML = '<strong>Unable to load data.</strong> ' + err.message +
-      '<br>Verify that <code>APPS_SCRIPT_URL</code> in the HTML is set to your Web App deployment URL, ' +
-      'and that the script is deployed with access set to <em>Anyone</em>.';
+      '<br>Verify that <code>APPS_SCRIPT_URL</code> is correct and deployed with access set to <em>Anyone</em>.';
     b.classList.add('show');
     toast('Data load failed — see error above');
   } finally {
     document.getElementById('syncIcon').classList.remove('sync-spin');
   }
 }
-
 // ── JSONP helper (bypasses CORS for Google Apps Script) ──────
 function fetchJSONP(url) {
   return new Promise((resolve, reject) => {
@@ -1043,8 +1088,10 @@ const PAL = Object.values(C);
 function dc(id) { if (CHARTS[id]) { CHARTS[id].destroy(); delete CHARTS[id]; } }
 
 function buildCharts() {
-  dc('fy'); dc('py'); dc('dc'); dc('df'); dc('pi');
-  const years = [...new Set(ALL.map(p=>p.year))].sort();
+  // Destroy existing charts cleanly
+  Object.keys(CHARTS).forEach(k => { CHARTS[k].destroy(); delete CHARTS[k]; });
+
+  const years = [...new Set(ALL.map(p => p.year))].sort();
 
   // 1. Annual Funding
   CHARTS.fy = new Chart(document.getElementById('cFundYear'), {
@@ -1052,13 +1099,13 @@ function buildCharts() {
     data: {
       labels: years,
       datasets: [{
-        data: years.map(y => ALL.filter(p=>p.year===y).reduce((s,p)=>s+(p.fund||0),0)/1e5),
-        backgroundColor: years.map((_,i) => PAL[i%PAL.length]+'cc'),
-        borderColor:     years.map((_,i) => PAL[i%PAL.length]),
+        data: years.map(y => ALL.filter(p => p.year === y).reduce((s, p) => s + (p.fund || 0), 0) / 1e5),
+        backgroundColor: years.map((_, i) => PAL[i % PAL.length] + 'cc'),
+        borderColor:     years.map((_, i) => PAL[i % PAL.length]),
         borderWidth: 1.5, borderRadius: 4,
       }]
     },
-    options: chartOpts({ yLabel: v => '₹'+v+'L', legend: false })
+    options: chartOpts({ legend: false })
   });
 
   // 2. Project Volume
@@ -1067,8 +1114,8 @@ function buildCharts() {
     data: {
       labels: years,
       datasets: [{
-        data: years.map(y => ALL.filter(p=>p.year===y).length),
-        borderColor: C.navy, backgroundColor: C.navy+'14',
+        data: years.map(y => ALL.filter(p => p.year === y).length),
+        borderColor: C.navy, backgroundColor: C.navy + '14',
         borderWidth: 2.5, pointBackgroundColor: C.navy,
         pointRadius: 5, tension: .3, fill: true,
       }]
@@ -1081,45 +1128,55 @@ function buildCharts() {
   CHARTS.dc = new Chart(document.getElementById('cDeptCount'), {
     type: 'bar',
     data: {
-      labels: dc_data.map(([d]) => trunc(d,30)),
-      datasets: [{ data: dc_data.map(([,v])=>v), backgroundColor: PAL.map(c=>c+'bb'), borderColor: PAL, borderWidth:1.5, borderRadius:4 }]
+      labels: dc_data.map(([d]) => trunc(d, 30)),
+      datasets: [{ data: dc_data.map(([, v]) => v), backgroundColor: PAL.map(c => c + 'bb'), borderColor: PAL, borderWidth: 1.5, borderRadius: 4 }]
     },
-    options: { ...chartOpts({ legend:false }), indexAxis:'y' }
+    options: { ...chartOpts({ legend: false }), indexAxis: 'y' }
   });
 
   // 4. Dept by funding
-  const df_data = topN(sumBy(ALL,'dept','fund'), 10);
+  const df_data = topN(sumBy(ALL, 'dept', 'fund'), 10);
   CHARTS.df = new Chart(document.getElementById('cDeptFund'), {
     type: 'bar',
     data: {
-      labels: df_data.map(([d]) => trunc(d,30)),
-      datasets: [{ data: df_data.map(([,v])=>v/1e5), backgroundColor: [...PAL].reverse().map(c=>c+'bb'), borderColor:[...PAL].reverse(), borderWidth:1.5, borderRadius:4 }]
+      labels: df_data.map(([d]) => trunc(d, 30)),
+      datasets: [{ data: df_data.map(([, v]) => v / 1e5), backgroundColor: [...PAL].reverse().map(c => c + 'bb'), borderColor: [...PAL].reverse(), borderWidth: 1.5, borderRadius: 4 }]
     },
-    options: { ...chartOpts({ yLabel: v=>'₹'+v+'L', legend:false }), indexAxis:'y' }
+    options: { ...chartOpts({ legend: false }), indexAxis: 'y' }
   });
 
   // 5. PI by funding
-  const pi_data = topN(sumBy(ALL,'pi','fund'), 15);
+  const pi_data = topN(sumBy(ALL, 'pi', 'fund'), 15);
   CHARTS.pi = new Chart(document.getElementById('cPI'), {
     type: 'bar',
     data: {
-      labels: pi_data.map(([n]) => trunc(n,26)),
-      datasets: [{ data: pi_data.map(([,v])=>v/1e5), backgroundColor: C.navy+'99', borderColor: C.navy, borderWidth:1.5, borderRadius:4 }]
+      labels: pi_data.map(([n]) => trunc(n, 26)),
+      datasets: [{ data: pi_data.map(([, v]) => v / 1e5), backgroundColor: C.navy + '99', borderColor: C.navy, borderWidth: 1.5, borderRadius: 4 }]
     },
-    options: { ...chartOpts({ yLabel: v=>'₹'+v+'L', legend:false }), indexAxis:'y' }
+    options: { ...chartOpts({ legend: false }), indexAxis: 'y' }
   });
 }
 
-function chartOpts({ yLabel, legend=false }) {
+function chartOpts({ yLabel, legend = false }) {
   return {
-    responsive: true, maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: legend },
-      tooltip: { bodyFont: { family:'JetBrains Mono', size:11 }, titleFont:{family:'Inter',size:12} }
+      tooltip: {
+        bodyFont: { family: 'JetBrains Mono', size: 11 },
+        titleFont: { family: 'Inter', size: 12 }
+      }
     },
     scales: {
-      x: { grid:{ color:'#f0efeb' }, ticks:{ font:{family:'JetBrains Mono',size:10}, callback: yLabel||undefined } },
-      y: { grid:{ color:'#f0efeb' }, ticks:{ font:{family:'Inter',size:10.5}, callback: yLabel||undefined } }
+      x: {
+        grid: { color: '#f0efeb' },
+        ticks: { font: { family: 'JetBrains Mono', size: 10 }, callback: yLabel || undefined }
+      },
+      y: {
+        grid: { color: '#f0efeb' },
+        ticks: { font: { family: 'Inter', size: 10.5 }, callback: yLabel || undefined }
+      }
     }
   };
 }
