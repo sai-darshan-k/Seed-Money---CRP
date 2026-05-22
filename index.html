@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centre for Research Projects — Christ University</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+/* ─── DESIGN TOKENS ─────────────────────────────────────── */
+:root {
+  --maroon:      #7b1d1d;
+  --maroon-dark: #5a1414;
+  --maroon-mid:  #a02828;
+  --maroon-lite: #f9f0f0;
+  --navy:        #1b2a4a;
+  --navy-mid:    #263654;
+  --gold:        #a8832a;
+  --gold-lite:   #fdf6e3;
+  --ink:         #1a1a24;
+  --ink2:        #3d3d52;
+  --ink3:        #767690;
+  --surface:     #f5f4f1;
+  --card:        #ffffff;
+  --border:      #e5e3dc;
+  --border2:     #ccc9c0;
+  --green:       #1e5c30;
+  --green-lite:  #eaf4ed;
+  --red-lite:    #fdecea;
+  --red:         #b71c1c;
+  --radius:      10px;
+  --shadow:      0 1px 12px rgba(26,26,36,.07);
+  --shadow-md:   0 4px 24px rgba(26,26,36,.10);
+  --shadow-lg:   0 10px 48px rgba(26,26,36,.14);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13.5px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SVG ICON SYSTEM ───────────────────────────────────── */
+.icon { display:inline-block; vertical-align:middle; flex-shrink:0; }
+
+/* ─── LOADER ────────────────────────────────────────────── */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--navy);
+  z-index: 9999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 24px;
+  transition: opacity .5s ease;
+}
+#loader.hidden { opacity: 0; pointer-events: none; }
+.loader-crest {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: white;
+  display: flex; align-items: center; justify-content: center;
+}
+.loader-crest svg { width: 36px; height: 36px; }
+.loader-uni {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px; font-weight: 600;
+  color: #ffffff;
+  letter-spacing: .02em;
+  text-align: center;
+}
+.loader-uni span { color: #e8b84b; }
+.loader-dept { font-size: 11px; color: #8898b8; letter-spacing: .12em; text-transform: uppercase; }
+.loader-track {
+  width: 220px; height: 2px;
+  background: rgba(255,255,255,.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #e8b84b, var(--maroon-mid));
+  border-radius: 2px;
+  transition: width .4s ease;
+}
+.loader-msg { font-size: 11.5px; color: #667799; font-weight: 300; }
+
+/* ─── TOPBAR ────────────────────────────────────────────── */
+.topbar {
+  background: var(--maroon-dark);
+  height: 4px;
+}
+.header {
+  background: var(--navy);
+  padding: 0 48px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.25);
+}
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-crest {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.header-crest svg { width: 26px; height: 26px; fill: #e8b84b; }
+.header-name {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px; font-weight: 600;
+  color: #ffffff; letter-spacing: .01em;
+  line-height: 1.2;
+}
+.header-sub { font-size: 10.5px; color: #8898b8; letter-spacing: .06em; text-transform: uppercase; }
+.header-divider {
+  width: 1px; height: 32px;
+  background: rgba(255,255,255,.12);
+  margin: 0 4px;
+}
+.header-right { display: flex; align-items: center; gap: 10px; }
+.hbtn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: transparent;
+  color: #b0bbd4;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  transition: all .18s;
+}
+.hbtn:hover { border-color: rgba(255,255,255,.3); color: #fff; }
+.hbtn svg { width: 13px; height: 13px; stroke: currentColor; }
+.hbtn-primary {
+  background: var(--maroon);
+  border-color: var(--maroon-mid);
+  color: white;
+}
+.hbtn-primary:hover { background: var(--maroon-mid); }
+.sync-spin { animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.last-sync-text { font-size: 11px; color: #5a6880; }
+
+/* ─── MAIN ──────────────────────────────────────────────── */
+.main { padding: 36px 48px 80px; max-width: 1680px; margin: 0 auto; }
+
+/* ─── PAGE TITLE ────────────────────────────────────────── */
+.page-header {
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.page-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 28px; font-weight: 600;
+  color: var(--ink); line-height: 1.2;
+}
+.page-title span { color: var(--maroon); }
+.page-meta { font-size: 12px; color: var(--ink3); margin-top: 4px; }
+.live-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #c8e6c9;
+  background: #f1f8f2;
+  font-size: 10.5px; font-weight: 500;
+  color: var(--green);
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.5; transform:scale(.8); }
+}
+
+/* ─── ERROR BANNER ──────────────────────────────────────── */
+.error-banner {
+  background: var(--red-lite);
+  border: 1px solid #f5c6c6;
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  font-size: 13px; color: #7f1010;
+  display: none; line-height: 1.6;
+}
+.error-banner.show { display: block; }
+
+/* ─── KPI STRIP ─────────────────────────────────────────── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px 18px;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 2px;
+  position: relative; overflow: hidden;
+  transition: box-shadow .2s;
+}
+.kpi:hover { box-shadow: var(--shadow-md); }
+.kpi-accent-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: 10px 10px 0 0;
+}
+.kpi-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.kpi-label {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--ink3); letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.kpi-icon-wrap {
+  width: 32px; height: 32px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+.kpi-icon-wrap svg { width: 16px; height: 16px; }
+.kpi-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 34px; font-weight: 600;
+  color: var(--ink); line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-note { font-size: 11px; color: var(--ink3); }
+
+/* ─── SECTION HEAD ──────────────────────────────────────── */
+.sec-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+}
+.sec-head-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px; font-weight: 600;
+  color: var(--ink);
+}
+.sec-head-line { flex: 1; height: 1px; background: var(--border); }
+.sec-head-tag {
+  font-size: 10px; font-weight: 600;
+  color: var(--ink3); letter-spacing: .1em;
+  text-transform: uppercase;
+  border: 1px solid var(--border2);
+  padding: 2px 8px; border-radius: 4px;
+}
+
+/* ─── CHARTS ────────────────────────────────────────────── */
+.charts-row1 {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 18px; margin-bottom: 18px;
+}
+.charts-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px; margin-bottom: 36px;
+}
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+}
+.chart-title { font-size: 13px; font-weight: 600; color: var(--ink2); margin-bottom: 2px; }
+.chart-sub   { font-size: 11px; color: var(--ink3); margin-bottom: 18px; }
+
+/* ─── TABLE SECTION ─────────────────────────────────────── */
+.table-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.table-toolbar {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap;
+  background: #fafaf8;
+}
+.toolbar-group { display: flex; align-items: center; gap: 8px; }
+.toolbar-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--ink3); letter-spacing: .07em;
+  text-transform: uppercase; white-space: nowrap;
+}
+.filter-sel, .filter-inp {
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--ink);
+  background: white;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+.filter-sel:focus, .filter-inp:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(27,42,74,.08);
+}
+.filter-sel { min-width: 130px; }
+.filter-inp { min-width: 230px; }
+.toolbar-sep { width: 1px; height: 22px; background: var(--border2); margin: 0 2px; }
+.spacer { flex: 1; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; border: none;
+  transition: all .18s; white-space: nowrap;
+}
+.btn svg { width: 13px; height: 13px; stroke: currentColor; flex-shrink: 0; }
+.btn-navy { background: var(--navy); color: white; }
+.btn-navy:hover { background: var(--navy-mid); }
+.btn-maroon { background: var(--maroon); color: white; }
+.btn-maroon:hover { background: var(--maroon-mid); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--ink2);
+}
+.btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+
+.results-bar {
+  padding: 8px 22px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px; color: var(--ink3);
+  background: #fafaf8;
+  display: flex; align-items: center; gap: 8px;
+}
+.results-bar strong { color: var(--ink2); }
+
+/* ─── TABLE ─────────────────────────────────────────────── */
+.tbl-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--navy);
+  color: rgba(255,255,255,.85);
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: .07em; text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer; user-select: none;
+  position: sticky; top: 0;
+  transition: background .15s;
+}
+thead th:hover { background: var(--navy-mid); }
+thead th .si { margin-left: 4px; opacity: .45; font-size: 9px; }
+thead th.sorted .si { opacity: 1; color: #e8b84b; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .12s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f8f7f4; }
+tbody td {
+  padding: 10px 14px;
+  color: var(--ink2);
+  vertical-align: middle;
+  font-size: 12.5px;
+}
+.td-year span {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; font-weight: 500;
+  background: var(--navy);
+  color: white;
+  padding: 2px 8px; border-radius: 4px;
+}
+.td-sl { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink3); }
+.td-pi { font-weight: 600; color: var(--ink); }
+.td-copi { font-size: 11.5px; color: var(--ink3); }
+.td-dept { font-size: 11.5px; }
+.td-appno { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink3); }
+.td-title { max-width: 300px; }
+.td-title-inner {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+  font-size: 12px;
+}
+.td-fund {
+  font-weight: 600; color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; white-space: nowrap;
+}
+.td-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink3); white-space: nowrap; }
+.td-ext  { font-size: 11px; color: var(--ink3); max-width: 120px; }
+.ra-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.ra-y { background: var(--green-lite); color: var(--green); }
+.ra-n { background: var(--red-lite);   color: var(--red);   }
+.ra-x { background: #f3f3f3;           color: #888;         }
+
+/* ─── PAGINATION ─────────────────────────────────────────── */
+.pagination {
+  display: flex; align-items: center; gap: 6px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+  justify-content: flex-end;
+  background: #fafaf8;
+  flex-wrap: wrap;
+}
+.pg-btn {
+  width: 30px; height: 30px;
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  background: white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 12px; color: var(--ink2);
+  transition: all .15s; font-family: 'Inter', sans-serif;
+}
+.pg-btn:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
+.pg-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+.pg-btn:disabled { opacity: .3; cursor: not-allowed; }
+.pg-dots { font-size: 12px; color: var(--ink3); padding: 0 2px; }
+.pg-info { font-size: 11px; color: var(--ink3); margin-right: 8px; }
+
+/* ─── NO DATA ────────────────────────────────────────────── */
+.no-data {
+  text-align: center; padding: 56px 20px;
+  color: var(--ink3);
+}
+.no-data svg { width: 40px; height: 40px; stroke: var(--border2); margin-bottom: 12px; }
+.no-data p { font-size: 13.5px; }
+
+/* ─── TOAST ──────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 28px; right: 28px;
+  background: var(--navy);
+  color: white; padding: 11px 18px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  box-shadow: var(--shadow-lg);
+  border-left: 3px solid var(--gold);
+  transform: translateY(60px); opacity: 0;
+  transition: all .25s ease; z-index: 999;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 11px; color: var(--ink3);
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-crest">
+    <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#7b1d1d" d="M18 2 L32 10 L32 26 L18 34 L4 26 L4 10 Z"/>
+      <path fill="white" d="M18 8 L26 12.5 L26 23.5 L18 28 L10 23.5 L10 12.5 Z"/>
+      <text x="18" y="22" text-anchor="middle" fill="#7b1d1d" font-size="9" font-weight="bold" font-family="serif">CU</text>
+    </svg>
+  </div>
+  <div class="loader-uni">Christ University <span>·</span> CRP</div>
+  <div class="loader-dept">Centre for Research Projects</div>
+  <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+  <div class="loader-msg" id="loaderMsg">Initialising…</div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-crest">
+      <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 2 L32 10 L32 26 L18 34 L4 26 L4 10 Z"/>
+        <path fill="rgba(255,255,255,.15)" d="M18 8 L26 12.5 L26 23.5 L18 28 L10 23.5 L10 12.5 Z"/>
+        <text x="18" y="22" text-anchor="middle" fill="white" font-size="8" font-weight="bold" font-family="serif">CU</text>
+      </svg>
+    </div>
+    <div>
+      <div class="header-name">Christ University</div>
+      <div class="header-sub">Centre for Research Projects — Seed Money</div>
+    </div>
+  </div>
+  <div class="header-divider"></div>
+  <div class="header-right">
+    <span class="last-sync-text" id="lastSync">—</span>
+    <button class="hbtn" onclick="loadData(true)">
+      <svg id="syncIcon" viewBox="0 0 24 24" fill="none" stroke-width="2">
+        <path d="M1 4v6h6M23 20v-6h-6"/>
+        <path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/>
+      </svg>
+      Refresh Data
+    </button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="error-banner" id="errorBanner"></div>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Research Projects <span>Overview</span></div>
+      <div class="page-meta">Seed Money Programme — Live Analytics Dashboard</div>
+    </div>
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      Live from Google Sheets
+    </div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi-accent-bar" style="background:var(--maroon)"></div>
+      <div class="kpi-header">
+        <div class="kpi-label">Total Projects</div>
+        <div class="kpi-icon-wrap" style="background:var(--maroon-lite)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value" id="kpiTotal">—</div>
+      <div class="kpi-note">Across all cohorts</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-accent-bar" style="background:var(--navy)"></div>
+      <div class="kpi-header">
+        <div class="kpi-label">Total Funding</div>
+        <div class="kpi-icon-wrap" style="background:#eef2f8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value" id="kpiFund">—</div>
+      <div class="kpi-note" id="kpiFundNote">INR</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-accent-bar" style="background:var(--gold)"></div>
+      <div class="kpi-header">
+        <div class="kpi-label">Departments</div>
+        <div class="kpi-icon-wrap" style="background:var(--gold-lite)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value" id="kpiDepts">—</div>
+      <div class="kpi-note">Unique departments</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-accent-bar" style="background:var(--green)"></div>
+      <div class="kpi-header">
+        <div class="kpi-label">Principal Investigators</div>
+        <div class="kpi-icon-wrap" style="background:var(--green-lite)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value" id="kpiPIs">—</div>
+      <div class="kpi-note">Unique investigators</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-accent-bar" style="background:#6a4c9c"></div>
+      <div class="kpi-header">
+        <div class="kpi-label">Years Covered</div>
+        <div class="kpi-icon-wrap" style="background:#f3effe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#6a4c9c" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value" id="kpiYears">—</div>
+      <div class="kpi-note" id="kpiYearRange">—</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 1 -->
+  <div class="sec-head">
+    <div class="sec-head-title">Financial Overview</div>
+    <div class="sec-head-line"></div>
+    <div class="sec-head-tag">Analytics</div>
+  </div>
+  <div class="charts-row1">
+    <div class="chart-card">
+      <div class="chart-title">Annual Funding Disbursement</div>
+      <div class="chart-sub">Total sanctioned amount per year (INR Lakhs)</div>
+      <canvas id="cFundYear" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Project Volume by Year</div>
+      <div class="chart-sub">Number of projects sanctioned each year</div>
+      <canvas id="cProjYear" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2 -->
+  <div class="sec-head">
+    <div class="sec-head-title">Departmental & Investigator Analysis</div>
+    <div class="sec-head-line"></div>
+    <div class="sec-head-tag">Breakdown</div>
+  </div>
+  <div class="charts-row2">
+    <div class="chart-card">
+      <div class="chart-title">Top 10 Departments by Projects</div>
+      <div class="chart-sub">Count of projects per department</div>
+      <canvas id="cDeptCount" height="250"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 10 Departments by Funding</div>
+      <div class="chart-sub">Total fund sanctioned (INR Lakhs)</div>
+      <canvas id="cDeptFund" height="250"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 15 Principal Investigators</div>
+      <div class="chart-sub">Cumulative fund approved (INR Lakhs)</div>
+      <canvas id="cPI" height="250"></canvas>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="sec-head">
+    <div class="sec-head-title">Project Records</div>
+    <div class="sec-head-line"></div>
+    <div class="sec-head-tag">All Data</div>
+  </div>
+
+  <div class="table-card">
+    <!-- TOOLBAR -->
+    <div class="table-toolbar">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Filter</span>
+        <select class="filter-sel" id="fYear" onchange="applyFilters()">
+          <option value="">All Years</option>
+        </select>
+        <select class="filter-sel" id="fDept" onchange="applyFilters()">
+          <option value="">All Departments</option>
+        </select>
+        <select class="filter-sel" id="fRA" onchange="applyFilters()">
+          <option value="">RA: All</option>
+          <option value="yes">RA: Approved</option>
+          <option value="no">RA: Not Approved</option>
+        </select>
+      </div>
+      <div class="toolbar-sep"></div>
+      <input class="filter-inp" id="fSearch" type="text"
+        placeholder="Search PI name, title, approval number…"
+        oninput="applyFilters()">
+      <button class="btn btn-ghost" onclick="clearFilters()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        Clear
+      </button>
+      <div class="spacer"></div>
+      <button class="btn btn-maroon" onclick="downloadExcel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Export to Excel
+      </button>
+    </div>
+
+    <!-- RESULTS BAR -->
+    <div class="results-bar" id="resultsBar">Loading data…</div>
+
+    <!-- TABLE -->
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('year')">Year<span class="si" data-col="year">↕</span></th>
+            <th onclick="sortBy('slNo')">Sl No<span class="si" data-col="slNo">↕</span></th>
+            <th onclick="sortBy('pi')" style="min-width:170px">Principal Investigator<span class="si" data-col="pi">↕</span></th>
+            <th style="min-width:150px">Co Investigator</th>
+            <th onclick="sortBy('dept')" style="min-width:150px">Department<span class="si" data-col="dept">↕</span></th>
+            <th onclick="sortBy('approvalNo')">Approval No<span class="si" data-col="approvalNo">↕</span></th>
+            <th style="min-width:280px">Project Title</th>
+            <th onclick="sortBy('fund')">Fund (INR)<span class="si" data-col="fund">↕</span></th>
+            <th onclick="sortBy('startDate')">Start Date<span class="si" data-col="startDate">↕</span></th>
+            <th onclick="sortBy('endDate')">End Date<span class="si" data-col="endDate">↕</span></th>
+            <th>Extension</th>
+            <th onclick="sortBy('raApproval')">RA<span class="si" data-col="raApproval">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="pagination" id="pg"></div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Christ University — Centre for Research Projects &nbsp;·&nbsp; Seed Money Programme Dashboard &nbsp;·&nbsp; Data served live from Google Sheets
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  CONFIGURATION — paste your Apps Script deployment URL here
+// ══════════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYRO_lCp5sWlfEEUkvU38L51G7tBH2ZZj6Tbl93bx2RsADpqtKVtqhLTiux5naqA0e/exec';
+// Replace YOUR_DEPLOYMENT_ID with your actual deployment ID from:
+// Apps Script → Deploy → Manage Deployments → copy the /exec URL
+
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+let ALL      = [];   // full dataset
+let FILTERED = [];   // after filters
+let PAGE     = 1;
+const PER    = 50;
+let S_COL    = 'year';
+let S_DIR    = 1;
+let CHARTS   = {};
+
+// ══════════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => loadData(false));
+
+// ══════════════════════════════════════════════════════════════
+//  LOADER HELPERS
+// ══════════════════════════════════════════════════════════════
+function setLoader(pct, msg) {
+  document.getElementById('loaderFill').style.width = pct + '%';
+  document.getElementById('loaderMsg').textContent  = msg;
+}
+function hideLoader() {
+  const el = document.getElementById('loader');
+  el.classList.add('hidden');
+  setTimeout(() => el.style.display = 'none', 520);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FETCH
+// ══════════════════════════════════════════════════════════════
+async function loadData(isRefresh) {
+  document.getElementById('syncIcon').classList.add('sync-spin');
+  document.getElementById('errorBanner').classList.remove('show');
+
+  if (!isRefresh) {
+    setLoader(10, 'Connecting to Google Sheets…');
+    const l = document.getElementById('loader');
+    l.style.display = 'flex';
+    l.classList.remove('hidden');
+  }
+
+  setLoader(30, 'Fetching project records…');
+
+  try {
+    const json = await fetchJSONP(APPS_SCRIPT_URL + '?action=all');
+    if (json.error) throw new Error(json.error);
+
+    ALL = json.projects || [];
+    setLoader(82, 'Populating filters…');
+    buildFilters();
+    setLoader(90, 'Rendering charts…');
+    applyFilters();
+    buildCharts();
+    setLoader(100, 'Ready');
+
+    const t = new Date();
+    document.getElementById('lastSync').textContent =
+      'Last updated ' + t.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) +
+      ' at ' + t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+    setTimeout(hideLoader, 380);
+    if (isRefresh) toast('Data refreshed — ' + ALL.length + ' projects loaded');
+
+  } catch (err) {
+    hideLoader();
+    const b = document.getElementById('errorBanner');
+    b.innerHTML = '<strong>Unable to load data.</strong> ' + err.message +
+      '<br>Verify that <code>APPS_SCRIPT_URL</code> in the HTML is set to your Web App deployment URL, ' +
+      'and that the script is deployed with access set to <em>Anyone</em>.';
+    b.classList.add('show');
+    toast('Data load failed — see error above');
+  } finally {
+    document.getElementById('syncIcon').classList.remove('sync-spin');
+  }
+}
+
+// ── JSONP helper (bypasses CORS for Google Apps Script) ──────
+function fetchJSONP(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_cb_' + Date.now();
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error('Request timed out'));
+    }, 15000);
+
+    window[cbName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup() {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = () => { cleanup(); reject(new Error('Script load failed — check deployment URL')); };
+    script.src = url + '&callback=' + cbName;
+    document.head.appendChild(script);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FILTERS
+// ══════════════════════════════════════════════════════════════
+function buildFilters() {
+  const years = [...new Set(ALL.map(p => p.year))].sort((a,b) => b-a);
+  const depts = [...new Set(ALL.map(p => p.dept).filter(Boolean))].sort();
+
+  const fy = document.getElementById('fYear');
+  fy.innerHTML = '<option value="">All Years</option>';
+  years.forEach(y => fy.innerHTML += `<option value="${y}">${y}</option>`);
+
+  const fd = document.getElementById('fDept');
+  fd.innerHTML = '<option value="">All Departments</option>';
+  depts.forEach(d => fd.innerHTML += `<option value="${d}">${h(d)}</option>`);
+}
+
+function applyFilters() {
+  const yr  = document.getElementById('fYear').value;
+  const dep = document.getElementById('fDept').value;
+  const ra  = document.getElementById('fRA').value.toLowerCase();
+  const q   = document.getElementById('fSearch').value.toLowerCase().trim();
+
+  FILTERED = ALL.filter(p => {
+    if (yr  && String(p.year) !== yr) return false;
+    if (dep && p.dept !== dep)        return false;
+    if (ra) {
+      const v = (p.raApproval || '').toLowerCase();
+      if (ra === 'yes' && !v.startsWith('yes')) return false;
+      if (ra === 'no'  && !v.startsWith('no'))  return false;
+    }
+    if (q) {
+      const hay = [p.pi, p.title, p.approvalNo, p.dept, p.coPi].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  PAGE = 1;
+  renderTable();
+  renderKPIs(FILTERED);
+
+  const rb = document.getElementById('resultsBar');
+  rb.innerHTML = `Showing <strong>${FILTERED.length}</strong> of <strong>${ALL.length}</strong> projects`;
+}
+
+function clearFilters() {
+  ['fYear','fDept','fRA'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fSearch').value = '';
+  applyFilters();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  KPIs
+// ══════════════════════════════════════════════════════════════
+function renderKPIs(data) {
+  const fund  = data.reduce((s,p) => s+(p.fund||0), 0);
+  const depts = new Set(data.map(p=>p.dept).filter(Boolean));
+  const pis   = new Set(data.map(p=>p.pi).filter(Boolean));
+  const yrs   = [...new Set(data.map(p=>p.year))].sort();
+
+  document.getElementById('kpiTotal').textContent    = data.length.toLocaleString('en-IN');
+  document.getElementById('kpiFund').textContent     = fmtShort(fund);
+  document.getElementById('kpiFundNote').textContent = '₹ ' + fmtFull(fund);
+  document.getElementById('kpiDepts').textContent    = depts.size;
+  document.getElementById('kpiPIs').textContent      = pis.size;
+  document.getElementById('kpiYears').textContent    = yrs.length;
+  document.getElementById('kpiYearRange').textContent =
+    yrs.length ? yrs[0] + ' – ' + yrs[yrs.length-1] : '—';
+}
+
+function fmtShort(n) {
+  if (n >= 1e7) return (n/1e7).toFixed(2) + ' Cr';
+  if (n >= 1e5) return (n/1e5).toFixed(2) + ' L';
+  return n.toLocaleString('en-IN');
+}
+function fmtFull(n) {
+  if (n >= 1e7) return (n/1e7).toFixed(2) + ' Crores';
+  if (n >= 1e5) return (n/1e5).toFixed(2) + ' Lakhs';
+  return n.toLocaleString('en-IN');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TABLE
+// ══════════════════════════════════════════════════════════════
+function renderTable() {
+  const sorted = [...FILTERED].sort((a,b) => {
+    let av = a[S_COL] ?? '', bv = b[S_COL] ?? '';
+    return (typeof av === 'number' ? av - bv : String(av).localeCompare(String(bv))) * S_DIR;
+  });
+
+  const pages = Math.max(1, Math.ceil(sorted.length / PER));
+  PAGE = Math.min(PAGE, pages);
+  const slice = sorted.slice((PAGE-1)*PER, PAGE*PER);
+
+  const tbody = document.getElementById('tbody');
+  if (!slice.length) {
+    tbody.innerHTML = `<tr><td colspan="12">
+      <div class="no-data">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>No records match the selected filters.</p>
+      </div></td></tr>`;
+    document.getElementById('pg').innerHTML = '';
+    return;
+  }
+
+  tbody.innerHTML = slice.map(p => {
+    const rv = (p.raApproval||'').toLowerCase();
+    const rb = rv.startsWith('yes') ? `<span class="ra-badge ra-y">Yes</span>`
+             : rv.startsWith('no')  ? `<span class="ra-badge ra-n">No</span>`
+             : `<span class="ra-badge ra-x">${h(p.raApproval)||'—'}</span>`;
+    return `
+    <tr>
+      <td class="td-year"><span>${p.year}</span></td>
+      <td class="td-sl">${p.slNo}</td>
+      <td class="td-pi">${h(p.pi)||'—'}</td>
+      <td class="td-copi">${h(p.coPi)||'—'}</td>
+      <td class="td-dept">${h(p.dept)||'—'}</td>
+      <td class="td-appno">${h(p.approvalNo)||'—'}</td>
+      <td class="td-title"><div class="td-title-inner" title="${h(p.title)}">${h(p.title)}</div></td>
+      <td class="td-fund">${p.fund ? '₹\u202f' + p.fund.toLocaleString('en-IN') : '—'}</td>
+      <td class="td-date">${p.startDate||'—'}</td>
+      <td class="td-date">${p.endDate  ||'—'}</td>
+      <td class="td-ext">${h(p.extension)||'—'}</td>
+      <td>${rb}</td>
+    </tr>`;
+  }).join('');
+
+  renderPagination(pages);
+}
+
+function renderPagination(pages) {
+  const pg = document.getElementById('pg');
+  if (pages <= 1) { pg.innerHTML=''; return; }
+  const W = 2;
+  let html = `<span class="pg-info">Page ${PAGE} of ${pages}</span>`;
+  html += `<button class="pg-btn" onclick="goPage(${PAGE-1})" ${PAGE===1?'disabled':''}>&lsaquo;</button>`;
+  for (let i=1; i<=pages; i++) {
+    if (i===1||i===pages||(i>=PAGE-W&&i<=PAGE+W))
+      html += `<button class="pg-btn ${i===PAGE?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    else if (i===PAGE-W-1||i===PAGE+W+1)
+      html += `<span class="pg-dots">…</span>`;
+  }
+  html += `<button class="pg-btn" onclick="goPage(${PAGE+1})" ${PAGE===pages?'disabled':''}>&rsaquo;</button>`;
+  pg.innerHTML = html;
+}
+
+function goPage(n) {
+  PAGE = n;
+  renderTable();
+  document.querySelector('.table-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function sortBy(col) {
+  S_DIR = S_COL === col ? S_DIR * -1 : 1;
+  S_COL = col;
+  document.querySelectorAll('.si').forEach(el => {
+    el.textContent = '↕';
+    el.closest('th')?.classList.remove('sorted');
+  });
+  const si = document.querySelector(`.si[data-col="${col}"]`);
+  if (si) { si.textContent = S_DIR===1?'↑':'↓'; si.closest('th').classList.add('sorted'); }
+  renderTable();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CHARTS
+// ══════════════════════════════════════════════════════════════
+const C = {
+  maroon: '#7b1d1d', navy: '#1b2a4a', gold: '#a8832a',
+  green: '#1e5c30',  purple: '#4a1e6e', teal: '#0d5c63',
+  slate: '#37474f',  rust: '#8d3200',
+};
+const PAL = Object.values(C);
+
+function dc(id) { if (CHARTS[id]) { CHARTS[id].destroy(); delete CHARTS[id]; } }
+
+function buildCharts() {
+  dc('fy'); dc('py'); dc('dc'); dc('df'); dc('pi');
+  const years = [...new Set(ALL.map(p=>p.year))].sort();
+
+  // 1. Annual Funding
+  CHARTS.fy = new Chart(document.getElementById('cFundYear'), {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: [{
+        data: years.map(y => ALL.filter(p=>p.year===y).reduce((s,p)=>s+(p.fund||0),0)/1e5),
+        backgroundColor: years.map((_,i) => PAL[i%PAL.length]+'cc'),
+        borderColor:     years.map((_,i) => PAL[i%PAL.length]),
+        borderWidth: 1.5, borderRadius: 4,
+      }]
+    },
+    options: chartOpts({ yLabel: v => '₹'+v+'L', legend: false })
+  });
+
+  // 2. Project Volume
+  CHARTS.py = new Chart(document.getElementById('cProjYear'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [{
+        data: years.map(y => ALL.filter(p=>p.year===y).length),
+        borderColor: C.navy, backgroundColor: C.navy+'14',
+        borderWidth: 2.5, pointBackgroundColor: C.navy,
+        pointRadius: 5, tension: .3, fill: true,
+      }]
+    },
+    options: chartOpts({ legend: false })
+  });
+
+  // 3. Dept by count
+  const dc_data = topN(countBy(ALL, 'dept'), 10);
+  CHARTS.dc = new Chart(document.getElementById('cDeptCount'), {
+    type: 'bar',
+    data: {
+      labels: dc_data.map(([d]) => trunc(d,30)),
+      datasets: [{ data: dc_data.map(([,v])=>v), backgroundColor: PAL.map(c=>c+'bb'), borderColor: PAL, borderWidth:1.5, borderRadius:4 }]
+    },
+    options: { ...chartOpts({ legend:false }), indexAxis:'y' }
+  });
+
+  // 4. Dept by funding
+  const df_data = topN(sumBy(ALL,'dept','fund'), 10);
+  CHARTS.df = new Chart(document.getElementById('cDeptFund'), {
+    type: 'bar',
+    data: {
+      labels: df_data.map(([d]) => trunc(d,30)),
+      datasets: [{ data: df_data.map(([,v])=>v/1e5), backgroundColor: [...PAL].reverse().map(c=>c+'bb'), borderColor:[...PAL].reverse(), borderWidth:1.5, borderRadius:4 }]
+    },
+    options: { ...chartOpts({ yLabel: v=>'₹'+v+'L', legend:false }), indexAxis:'y' }
+  });
+
+  // 5. PI by funding
+  const pi_data = topN(sumBy(ALL,'pi','fund'), 15);
+  CHARTS.pi = new Chart(document.getElementById('cPI'), {
+    type: 'bar',
+    data: {
+      labels: pi_data.map(([n]) => trunc(n,26)),
+      datasets: [{ data: pi_data.map(([,v])=>v/1e5), backgroundColor: C.navy+'99', borderColor: C.navy, borderWidth:1.5, borderRadius:4 }]
+    },
+    options: { ...chartOpts({ yLabel: v=>'₹'+v+'L', legend:false }), indexAxis:'y' }
+  });
+}
+
+function chartOpts({ yLabel, legend=false }) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: legend },
+      tooltip: { bodyFont: { family:'JetBrains Mono', size:11 }, titleFont:{family:'Inter',size:12} }
+    },
+    scales: {
+      x: { grid:{ color:'#f0efeb' }, ticks:{ font:{family:'JetBrains Mono',size:10}, callback: yLabel||undefined } },
+      y: { grid:{ color:'#f0efeb' }, ticks:{ font:{family:'Inter',size:10.5}, callback: yLabel||undefined } }
+    }
+  };
+}
+
+function countBy(arr, key) {
+  return arr.reduce((acc,p) => {
+    const k=(p[key]||'Unknown').trim();
+    acc[k]=(acc[k]||0)+1; return acc;
+  }, {});
+}
+function sumBy(arr, groupKey, sumKey) {
+  return arr.reduce((acc,p) => {
+    const k=(p[groupKey]||'Unknown').trim();
+    acc[k]=(acc[k]||0)+(p[sumKey]||0); return acc;
+  }, {});
+}
+function topN(obj, n) {
+  return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n);
+}
+function trunc(s, n) { return s && s.length > n ? s.slice(0,n)+'…' : s; }
+
+// ══════════════════════════════════════════════════════════════
+//  EXCEL EXPORT
+// ══════════════════════════════════════════════════════════════
+function downloadExcel() {
+  if (!FILTERED.length) { toast('No data to export'); return; }
+
+  const wb = XLSX.utils.book_new();
+  const COL_W = [8,8,28,28,24,20,60,18,14,14,20,12];
+
+  // All-in-one sheet
+  const allRows = FILTERED.map(toRow);
+  const wsAll = XLSX.utils.json_to_sheet(allRows);
+  wsAll['!cols'] = COL_W.map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsAll, 'All Projects');
+
+  // Per-year sheets (reflecting active filters)
+  const years = [...new Set(FILTERED.map(p=>p.year))].sort();
+  years.forEach(y => {
+    const rows = FILTERED.filter(p=>p.year===y).map(toRow);
+    if (!rows.length) return;
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = COL_W.slice(1).map(w=>({wch:w})); // no year col on year sheets
+    XLSX.utils.book_append_sheet(wb, ws, String(y));
+  });
+
+  // Filename with active filter hints
+  const parts = ['ResearchProjects_CRP'];
+  if (document.getElementById('fYear').value) parts.push(document.getElementById('fYear').value);
+  if (document.getElementById('fDept').value) parts.push('Dept');
+  if (document.getElementById('fRA').value)   parts.push('RA');
+  if (document.getElementById('fSearch').value.trim()) parts.push('Filtered');
+  parts.push(new Date().toISOString().slice(0,10));
+
+  XLSX.writeFile(wb, parts.join('_') + '.xlsx');
+  toast('Exported ' + FILTERED.length + ' records to Excel');
+}
+
+function toRow(p) {
+  return {
+    'Year':                    p.year,
+    'Sl No':                   p.slNo,
+    'Principal Investigator':  p.pi,
+    'Co Investigator':         p.coPi,
+    'Department':              p.dept,
+    'Project Approval No':     p.approvalNo,
+    'Project Title':           p.title,
+    'Fund Approved (INR)':     p.fund || '',
+    'Start Date':              p.startDate,
+    'End Date':                p.endDate,
+    'Project Extension':       p.extension,
+    'RA Approval':             p.raApproval,
+  };
+}
+
+// ══════════════════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════════════════
+function h(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3200);
+}
+</script>
+</body>
+</html>
