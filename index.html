@@ -36,7 +36,6 @@
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);font-size:13.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
-/* TOPBAR */
 .topbar{background:var(--maroon-dark);height:4px}
 .header{background:var(--navy);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:70px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.25)}
 .header-brand{display:flex;align-items:center;gap:14px}
@@ -47,17 +46,14 @@ body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);f
 .hbtn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#b0bbd4;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .18s}
 .hbtn:hover{border-color:rgba(255,255,255,.3);color:#fff}
 
-/* MAIN */
 .main{padding:36px 48px 80px;max-width:1680px;margin:0 auto}
 
-/* PAGE HEADER */
 .page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
 .page-title{font-family:'EB Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);line-height:1.2}
 .page-title span{color:var(--maroon)}
 .page-meta{font-size:12px;color:var(--ink3);margin-top:4px}
 .data-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--card);font-size:11px;font-weight:500;color:var(--ink2)}
 
-/* KPI STRIP */
 .kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:28px}
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden;transition:box-shadow .2s}
 .kpi:hover{box-shadow:var(--shadow-md)}
@@ -69,20 +65,17 @@ body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);f
 .kpi-value{font-family:'EB Garamond',serif;font-size:34px;font-weight:600;color:var(--ink);line-height:1;margin-bottom:4px}
 .kpi-note{font-size:11px;color:var(--ink3)}
 
-/* SECTION HEAD */
 .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .sec-head-title{font-family:'EB Garamond',serif;font-size:19px;font-weight:600;color:var(--ink)}
 .sec-head-line{flex:1;height:1px;background:var(--border)}
 .sec-head-tag{font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border2);padding:2px 8px;border-radius:4px}
 
-/* CHARTS */
 .charts-row1{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-bottom:18px}
 .charts-row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:36px}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow)}
 .chart-title{font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:2px}
 .chart-sub{font-size:11px;color:var(--ink3);margin-bottom:18px}
 
-/* YEAR TABS */
 .year-tabs-wrap{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
 .year-tab{padding:7px 16px;border-radius:6px;border:1px solid var(--border2);background:var(--card);color:var(--ink2);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
 .year-tab:hover{border-color:var(--navy);color:var(--navy)}
@@ -90,7 +83,6 @@ body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);f
 .year-tab-all{background:var(--maroon-lite);border-color:var(--maroon);color:var(--maroon)}
 .year-tab-all.active{background:var(--maroon);color:white}
 
-/* TABLE */
 .table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .table-toolbar{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fafaf8}
 .toolbar-group{display:flex;align-items:center;gap:8px}
@@ -134,7 +126,6 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
 .ra-n{background:var(--red-lite);color:var(--red)}
 .ra-x{background:#f3f3f3;color:#888}
 
-/* PAGINATION */
 .pagination{display:flex;align-items:center;gap:6px;padding:14px 22px;border-top:1px solid var(--border);justify-content:flex-end;background:#fafaf8;flex-wrap:wrap}
 .pg-btn{width:30px;height:30px;border:1px solid var(--border2);border-radius:5px;background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--ink2);transition:all .15s;font-family:'Inter',sans-serif}
 .pg-btn:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
@@ -143,17 +134,14 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
 .pg-dots{font-size:12px;color:var(--ink3);padding:0 2px}
 .pg-info{font-size:11px;color:var(--ink3);margin-right:8px}
 
-/* NO DATA */
 .no-data{text-align:center;padding:56px 20px;color:var(--ink3)}
 .no-data p{font-size:13.5px}
 
-/* TOAST */
 .toast{position:fixed;bottom:28px;right:28px;background:var(--navy);color:white;padding:11px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 10px 48px rgba(26,26,36,.14);border-left:3px solid var(--gold);transform:translateY(60px);opacity:0;transition:all .25s ease;z-index:999}
 .toast.show{transform:translateY(0);opacity:1}
 
-/* FOOTER */
 .footer{text-align:center;padding:24px;font-size:11px;color:var(--ink3);border-top:1px solid var(--border);margin-top:20px}
-  .error-banner{background:#fdecea;border:1px solid #f5c6c6;border-left:3px solid #b71c1c;border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#7f1010;display:none;line-height:1.6}
+.error-banner{background:#fdecea;border:1px solid #f5c6c6;border-left:3px solid #b71c1c;border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#7f1010;display:none;line-height:1.6}
 </style>
 </head>
 <body>
@@ -162,7 +150,9 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
 
 <!-- LOADER OVERLAY -->
 <div id="loader" style="position:fixed;inset:0;background:var(--navy);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .5s ease;">
-  <img src="Christ logo.png" alt="Christ University" style="width:72px;height:72px;object-fit:contain;border-radius:12px;background:white;padding:6px;">
+  <div style="width:72px;height:72px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#7b1d1d"/><text x="20" y="27" text-anchor="middle" font-family="serif" font-size="18" fill="white" font-weight="bold">C</text></svg>
+  </div>
   <div style="font-family:'EB Garamond',serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:.02em;">Christ University <span style="color:#e8b84b">&middot;</span> CRP</div>
   <div style="font-size:11px;color:#8898b8;letter-spacing:.12em;text-transform:uppercase;">Centre for Research Projects</div>
   <div style="width:220px;height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;">
@@ -178,7 +168,7 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
 <header class="header">
   <div class="header-brand">
     <div class="header-crest">
-      <img src="Christ logo.png" alt="Christ University" style="width:38px;height:38px;object-fit:contain;border-radius:4px;">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="6" fill="#7b1d1d"/><text x="19" y="26" text-anchor="middle" font-family="Georgia,serif" font-size="20" fill="white" font-weight="bold">C</text></svg>
     </div>
     <div>
       <div class="header-name">Christ University</div>
@@ -186,7 +176,7 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
     </div>
   </div>
   <div class="header-right">
-        <span id="lastSync" style="font-size:11px;color:#5a6880;"></span>
+    <span id="lastSync" style="font-size:11px;color:#5a6880;"></span>
     <button class="hbtn" onclick="loadData()" style="margin-right:6px;">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:13px;height:13px;stroke:currentColor"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>
       Refresh
@@ -202,16 +192,16 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
 
   <div id="errorBanner" class="error-banner"></div>
 
-
   <!-- PAGE HEADER -->
   <div class="page-header">
     <div>
       <div class="page-title">Research Projects <span>Dashboard</span></div>
       <div class="page-meta">Seed Money &amp; MRP Programme — Christ University</div>
     </div>
-    <div class="data-badge">
+    <!-- FIX 3: id added so JS can update this dynamically -->
+    <div class="data-badge" id="dataBadge">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      585 projects · 2010–2025
+      <span id="dataBadgeText">Loading…</span>
     </div>
   </div>
 
@@ -379,8 +369,8 @@ tbody td{padding:10px 14px;color:var(--ink2);vertical-align:middle;font-size:12.
 
 </main>
 
-<footer class="footer">
-  Christ University — Centre for Research Projects &nbsp;·&nbsp; Seed Money &amp; MRP Programme &nbsp;·&nbsp; 585 Projects &nbsp;·&nbsp; 2010–2025
+<footer class="footer" id="footerEl">
+  Christ University — Centre for Research Projects &nbsp;·&nbsp; Seed Money &amp; MRP Programme &nbsp;·&nbsp; <span id="footerStats">Loading…</span>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -403,10 +393,18 @@ let YEARS    = [];
 // ── BOOT ──
 window.addEventListener('DOMContentLoaded', () => loadData());
 
-// ── LIVE FETCH via JSONP (works cross-origin with Apps Script) ──
+// ── LIVE FETCH via JSONP ──
 function loadData() {
   showLoader(true);
   setLoaderMsg('Connecting to Google Sheets…');
+
+  // FIX 1: Clear year tabs before rebuild to prevent duplicates on refresh
+  const tabsWrap = document.getElementById('yearTabs');
+  tabsWrap.innerHTML = '';
+
+  // FIX 2 (prep): Also reset dept filter to just the All option
+  const fd = document.getElementById('fDept');
+  fd.innerHTML = '<option value="">All Departments</option>';
 
   const cbName = 'cb_' + Math.floor(Math.random() * 1e9);
   const script = document.createElement('script');
@@ -428,14 +426,15 @@ function loadData() {
       return;
     }
     ALL   = data.projects || [];
-    YEARS = [...new Set(ALL.map(p => p.year))].sort((a,b) => b-a);
+    // FIX 2: Filter out blank dept/pi before computing YEARS
+    YEARS = [...new Set(ALL.map(p => p.year).filter(Boolean))].sort((a,b) => b-a);
     setLoaderMsg('Rendering dashboard…');
     buildYearTabs();
     buildDeptFilter();
     renderKPIs(ALL);
     buildCharts();
-    ACTIVE_YEAR = YEARS[0];
-    setActiveYear(YEARS[0]);
+    ACTIVE_YEAR = null; // Default to All Years on load/refresh
+    setActiveYear(null);
     document.getElementById('lastSync').textContent =
       'Live · updated ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
     showLoader(false);
@@ -455,7 +454,6 @@ function loadData() {
     showLoader(false);
   };
 
-  // Append to body — avoids head-append issues that break the Apps Script redirect
   script.src = APPS_SCRIPT_URL + '?action=all&callback=' + cbName;
   document.body.appendChild(script);
   setLoaderMsg('Fetching project records…');
@@ -481,11 +479,10 @@ function showError(msg) {
   b.style.display = 'block';
 }
 
-
 // ── YEAR TABS ──
 function buildYearTabs() {
+  // FIX 1: Container is already cleared in loadData() before this is called
   const wrap = document.getElementById('yearTabs');
-  // All button
   const allBtn = document.createElement('button');
   allBtn.className = 'year-tab year-tab-all';
   allBtn.textContent = 'All Years';
@@ -505,8 +502,8 @@ function buildYearTabs() {
 
 function setActiveYear(year) {
   ACTIVE_YEAR = year;
-  // Update tab styles
-  document.getElementById('tab-all').classList.toggle('active', year === null);
+  const allTab = document.getElementById('tab-all');
+  if (allTab) allTab.classList.toggle('active', year === null);
   YEARS.forEach(y => {
     const el = document.getElementById('tab-' + y);
     if (el) el.classList.toggle('active', y === year);
@@ -517,7 +514,8 @@ function setActiveYear(year) {
 
 // ── DEPT FILTER ──
 function buildDeptFilter() {
-  const depts = [...new Set(ALL.map(p => p.dept).filter(Boolean))].sort();
+  // FIX 2: Filter out blank/empty dept values so "Unknown" never appears
+  const depts = [...new Set(ALL.map(p => p.dept).filter(d => d && d.trim() !== ''))].sort();
   const fd = document.getElementById('fDept');
   depts.forEach(d => {
     const o = document.createElement('option');
@@ -547,7 +545,6 @@ function applyFilters() {
     return true;
   });
 
-  // Sort by year desc then slNo asc by default
   FILTERED.sort((a,b) => {
     if (S_COL === 'slNo' && a.year !== b.year) return b.year - a.year;
     let av = a[S_COL] ?? '', bv = b[S_COL] ?? '';
@@ -573,9 +570,10 @@ function clearFilters() {
 // ── KPIs ──
 function renderKPIs(data) {
   const fund  = data.reduce((s,p) => s+(p.fund||0), 0);
-  const depts = new Set(data.map(p=>p.dept).filter(Boolean));
-  const pis   = new Set(data.map(p=>p.pi).filter(Boolean));
-  const yrs   = [...new Set(data.map(p=>p.year))].sort();
+  // FIX 2: Exclude blank dept/pi from counts so they don't inflate or create "Unknown"
+  const depts = new Set(data.map(p=>p.dept).filter(d => d && d.trim() !== ''));
+  const pis   = new Set(data.map(p=>p.pi).filter(pi => pi && pi.trim() !== ''));
+  const yrs   = [...new Set(data.map(p=>p.year).filter(Boolean))].sort();
 
   document.getElementById('kpiTotal').textContent    = data.length.toLocaleString('en-IN');
   document.getElementById('kpiFund').textContent     = fmtShort(fund);
@@ -585,6 +583,14 @@ function renderKPIs(data) {
   document.getElementById('kpiYears').textContent    = yrs.length;
   document.getElementById('kpiYearRange').textContent =
     yrs.length ? yrs[0] + ' – ' + yrs[yrs.length-1] : '—';
+
+  // FIX 3: Update the top badge and footer dynamically
+  const yearMin = yrs.length ? yrs[0] : '?';
+  const yearMax = yrs.length ? yrs[yrs.length-1] : '?';
+  document.getElementById('dataBadgeText').textContent =
+    data.length.toLocaleString('en-IN') + ' projects · ' + yearMin + '–' + yearMax;
+  document.getElementById('footerStats').textContent =
+    data.length.toLocaleString('en-IN') + ' Projects · ' + yearMin + '–' + yearMax;
 }
 
 function fmtShort(n) {
@@ -678,7 +684,7 @@ const PAL = Object.values(C);
 function buildCharts() {
   Object.keys(CHARTS).forEach(k => { CHARTS[k].destroy(); delete CHARTS[k]; });
 
-  const years = [...new Set(ALL.map(p => p.year))].sort();
+  const years = [...new Set(ALL.map(p => p.year).filter(Boolean))].sort();
 
   // 1. Annual Funding bar
   CHARTS.fy = new Chart(document.getElementById('cFundYear'), {
@@ -697,26 +703,16 @@ function buildCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => '₹ ' + ctx.parsed.y.toFixed(2) + ' Lakhs'
-          }
-        }
+        tooltip: { callbacks: { label: ctx => '₹ ' + ctx.parsed.y.toFixed(2) + ' Lakhs' } }
       },
       scales: {
         x: {
           grid: { color: '#f0efeb' },
-          ticks: {
-            font: { family: 'JetBrains Mono', size: 10 },
-            maxRotation: 45, minRotation: 0
-          }
+          ticks: { font: { family: 'JetBrains Mono', size: 10 }, maxRotation: 45, minRotation: 0 }
         },
         y: {
           grid: { color: '#f0efeb' },
-          ticks: {
-            font: { family: 'JetBrains Mono', size: 10 },
-            callback: v => '₹' + v.toFixed(0) + 'L'
-          }
+          ticks: { font: { family: 'JetBrains Mono', size: 10 }, callback: v => '₹' + v.toFixed(0) + 'L' }
         }
       }
     }
@@ -754,8 +750,9 @@ function buildCharts() {
     }
   });
 
-  // 3. Top dept by count (horizontal bar)
-  const dcData = topN(countBy(ALL, 'dept'), 10);
+  // 3. Top dept by count
+  // FIX 2: Pass skipEmpty=true to exclude blank dept rows from charts
+  const dcData = topN(countBy(ALL, 'dept', true), 10);
   CHARTS.dc = new Chart(document.getElementById('cDeptCount'), {
     type: 'bar',
     data: {
@@ -770,8 +767,8 @@ function buildCharts() {
     options: hbarOpts({ unit: 'projects', suffix: '' })
   });
 
-  // 4. Top dept by funding (horizontal bar)
-  const dfData = topN(sumBy(ALL, 'dept', 'fund'), 10);
+  // 4. Top dept by funding
+  const dfData = topN(sumBy(ALL, 'dept', 'fund', true), 10);
   CHARTS.df = new Chart(document.getElementById('cDeptFund'), {
     type: 'bar',
     data: {
@@ -786,8 +783,8 @@ function buildCharts() {
     options: hbarOpts({ unit: 'lakhs', suffix: 'L' })
   });
 
-  // 5. Top PI by funding (horizontal bar)
-  const piData = topN(sumBy(ALL, 'pi', 'fund'), 15);
+  // 5. Top PI by funding
+  const piData = topN(sumBy(ALL, 'pi', 'fund', true), 15);
   CHARTS.pi = new Chart(document.getElementById('cPI'), {
     type: 'bar',
     data: {
@@ -820,19 +817,14 @@ function hbarOpts({ unit, suffix }) {
       x: {
         grid: { color: '#f0efeb' },
         border: { display: false },
-        ticks: {
-          font: { family: 'JetBrains Mono', size: 10 },
-          callback: v => suffix ? v.toFixed(0) + suffix : v
-        }
+        ticks: { font: { family: 'JetBrains Mono', size: 10 }, callback: v => suffix ? v.toFixed(0) + suffix : v }
       },
       y: {
         grid: { display: false },
         border: { display: false },
         ticks: {
           font: { family: 'Inter', size: 10.5 },
-          mirror: false,
-          padding: 8,
-          crossAlign: 'far',
+          mirror: false, padding: 8, crossAlign: 'far',
           callback: function(val) {
             const label = this.getLabelForValue(val);
             if (label.length <= 30) return label;
@@ -853,20 +845,29 @@ function hbarOpts({ unit, suffix }) {
   };
 }
 
-function countBy(arr, key) {
-  return arr.reduce((acc,p) => {
-    const k=(p[key]||'Unknown').trim();
-    acc[k]=(acc[k]||0)+1; return acc;
+// FIX 2: Added skipEmpty param — when true, entries with blank/empty keys are ignored
+function countBy(arr, key, skipEmpty) {
+  return arr.reduce((acc, p) => {
+    const k = (p[key] || '').trim();
+    if (skipEmpty && !k) return acc; // skip blank entries
+    const label = k || 'Unknown';
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
   }, {});
 }
-function sumBy(arr, gk, sk) {
-  return arr.reduce((acc,p) => {
-    const k=(p[gk]||'Unknown').trim();
-    acc[k]=(acc[k]||0)+(p[sk]||0); return acc;
+
+function sumBy(arr, gk, sk, skipEmpty) {
+  return arr.reduce((acc, p) => {
+    const k = (p[gk] || '').trim();
+    if (skipEmpty && !k) return acc; // skip blank entries
+    const label = k || 'Unknown';
+    acc[label] = (acc[label] || 0) + (p[sk] || 0);
+    return acc;
   }, {});
 }
+
 function topN(obj, n) {
-  return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n);
+  return Object.entries(obj).sort((a,b) => b[1]-a[1]).slice(0,n);
 }
 
 // ── EXCEL EXPORT ──
