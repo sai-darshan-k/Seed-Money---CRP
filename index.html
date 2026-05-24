@@ -398,67 +398,35 @@ function loadData() {
   showLoader(true);
   setLoaderMsg('Connecting to Google Sheets…');
 
-  // FIX 1: Clear year tabs before rebuild to prevent duplicates on refresh
-  const tabsWrap = document.getElementById('yearTabs');
-  tabsWrap.innerHTML = '';
+  document.getElementById('yearTabs').innerHTML = '';
+  document.getElementById('fDept').innerHTML = '<option value="">All Departments</option>';
 
-  // FIX 2 (prep): Also reset dept filter to just the All option
-  const fd = document.getElementById('fDept');
-  fd.innerHTML = '<option value="">All Departments</option>';
-
-  const cbName = 'cb_' + Math.floor(Math.random() * 1e9);
-  const script = document.createElement('script');
-  let done = false;
-
-  const timer = setTimeout(() => {
-    if (done) return;
-    done = true; cleanup();
-    showError('Request timed out after 20s. Check the Apps Script deployment URL and ensure access is set to <em>Anyone</em>.');
-    showLoader(false);
-  }, 20000);
-
-  window[cbName] = function(data) {
-    if (done) return;
-    done = true; cleanup();
-    if (data.error) {
-      showError('Apps Script error: ' + data.error);
+  fetch(APPS_SCRIPT_URL + '?action=all')
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      if (data.error) { showError('Apps Script error: ' + data.error); showLoader(false); return; }
+      ALL   = data.projects || [];
+      YEARS = [...new Set(ALL.map(p => p.year).filter(Boolean))].sort((a,b) => b-a);
+      setLoaderMsg('Rendering dashboard…');
+      buildYearTabs();
+      buildDeptFilter();
+      renderKPIs(ALL);
+      buildCharts();
+      ACTIVE_YEAR = null;
+      setActiveYear(null);
+      document.getElementById('lastSync').textContent =
+        'Live · updated ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
       showLoader(false);
-      return;
-    }
-    ALL   = data.projects || [];
-    // FIX 2: Filter out blank dept/pi before computing YEARS
-    YEARS = [...new Set(ALL.map(p => p.year).filter(Boolean))].sort((a,b) => b-a);
-    setLoaderMsg('Rendering dashboard…');
-    buildYearTabs();
-    buildDeptFilter();
-    renderKPIs(ALL);
-    buildCharts();
-    ACTIVE_YEAR = null; // Default to All Years on load/refresh
-    setActiveYear(null);
-    document.getElementById('lastSync').textContent =
-      'Live · updated ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
-    showLoader(false);
-    toast('Loaded ' + ALL.length + ' projects from Google Sheets');
-  };
-
-  function cleanup() {
-    clearTimeout(timer);
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-  }
-
-  script.onerror = function() {
-    if (done) return;
-    done = true; cleanup();
-    showError('Failed to reach Apps Script. Check the deployment URL.');
-    showLoader(false);
-  };
-
-  script.src = APPS_SCRIPT_URL + '?action=all&callback=' + cbName;
-  document.body.appendChild(script);
-  setLoaderMsg('Fetching project records…');
+      toast('Loaded ' + ALL.length + ' projects from Google Sheets');
+    })
+    .catch(err => {
+      showError('Fetch failed: ' + err.message + '. Ensure the Apps Script is deployed as <em>Execute as: Me</em> and <em>Access: Anyone</em>.');
+      showLoader(false);
+    });
 }
-
 function showLoader(on) {
   const el = document.getElementById('loader');
   if (on) {
