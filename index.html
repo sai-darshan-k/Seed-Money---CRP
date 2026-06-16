@@ -520,6 +520,8 @@ function applyFilters() {
   });
 
   PAGE = 1;
+  renderKPIs(FILTERED);      // ← ADD THIS
+  updateCharts(FILTERED);
   renderTable();
 
   const label = ACTIVE_YEAR ? String(ACTIVE_YEAR) : 'All Years';
@@ -868,6 +870,41 @@ function toast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3200);
+}
+function updateCharts(data) {
+  const years = [...new Set(data.map(p => p.year).filter(Boolean))].sort();
+
+  // 1. Annual Funding bar
+  CHARTS.fy.data.labels = years.map(String);
+  CHARTS.fy.data.datasets[0].data = years.map(y =>
+    data.filter(p => p.year === y).reduce((s, p) => s + (p.fund || 0), 0) / 1e5
+  );
+  CHARTS.fy.data.datasets[0].backgroundColor = years.map((_, i) => PAL[i % PAL.length] + 'cc');
+  CHARTS.fy.data.datasets[0].borderColor      = years.map((_, i) => PAL[i % PAL.length]);
+  CHARTS.fy.update();
+
+  // 2. Project volume line
+  CHARTS.py.data.labels = years.map(String);
+  CHARTS.py.data.datasets[0].data = years.map(y => data.filter(p => p.year === y).length);
+  CHARTS.py.update();
+
+  // 3. Top dept by count
+  const dcData = topN(countBy(data, 'dept', true), 10);
+  CHARTS.dc.data.labels = dcData.map(([d]) => d);
+  CHARTS.dc.data.datasets[0].data = dcData.map(([, v]) => v);
+  CHARTS.dc.update();
+
+  // 4. Top dept by funding
+  const dfData = topN(sumBy(data, 'dept', 'fund', true), 10);
+  CHARTS.df.data.labels = dfData.map(([d]) => d);
+  CHARTS.df.data.datasets[0].data = dfData.map(([, v]) => v / 1e5);
+  CHARTS.df.update();
+
+  // 5. Top PI by funding
+  const piData = topN(sumBy(data, 'pi', 'fund', true), 15);
+  CHARTS.pi.data.labels = piData.map(([n]) => n);
+  CHARTS.pi.data.datasets[0].data = piData.map(([, v]) => v / 1e5);
+  CHARTS.pi.update();
 }
 </script>
 </body>
