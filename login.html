@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHRIST University — CRP Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#080D1A;--ink2:#1A2236;--ink3:#374159;--ink4:#64748B;--ink5:#94A3B8;
+  --gold:#B8811F;--gold2:#D4A03A;--gold3:#F0C060;
+  --cream:#F6F3EE;
+  --red:#8B1A1A;--red-bg:#FEF2F2;
+  --green:#18794E;
+  --border:rgba(8,13,26,.08);--border-gold:rgba(184,129,31,.22);
+  --shadow-md:0 20px 56px rgba(8,13,26,.18),0 4px 16px rgba(8,13,26,.1);
+  --f-display:'Cormorant Garamond',serif;
+  --f-body:'DM Sans',sans-serif;
+  --f-mono:'DM Mono',monospace;
+}
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:var(--f-body);background:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 85% 15%,rgba(184,129,31,.16),transparent 52%),radial-gradient(ellipse 45% 65% at 8% 88%,rgba(184,129,31,.08),transparent 48%),radial-gradient(ellipse 50% 50% at 50% 50%,rgba(26,34,54,.5),transparent 65%)}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 75%)}
+.card{position:relative;z-index:1;width:100%;max-width:410px;background:#fff;border-radius:20px;border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow-md),0 0 0 1px rgba(184,129,31,.08);padding:42px 38px 34px;animation:risein .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes risein{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.logo-wrap{display:flex;justify-content:center;margin-bottom:26px}
+.logo-img{width:86px;height:86px;border-radius:14px;object-fit:contain;background:var(--cream);border:1.5px solid var(--border-gold);padding:8px}
+.logo-ph{width:86px;height:86px;border-radius:14px;background:linear-gradient(145deg,rgba(184,129,31,.1),rgba(184,129,31,.03));border:1.5px dashed rgba(184,129,31,.38);display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.logo-ph svg{width:26px;height:26px;color:var(--gold2);opacity:.75}
+.logo-ph span{font-size:8px;color:var(--gold);font-family:var(--f-mono);letter-spacing:.1em;opacity:.85;text-transform:uppercase}
+.title{font-family:var(--f-display);font-size:25px;font-weight:600;color:var(--ink);text-align:center;line-height:1.15;letter-spacing:.01em}
+.subtitle{font-size:11.5px;color:var(--ink4);text-align:center;margin-top:5px;line-height:1.5}
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border-gold),transparent);margin:20px 0}
+.alert{display:none;align-items:center;gap:9px;padding:10px 13px;border-radius:8px;font-size:12px;line-height:1.5;margin-bottom:14px}
+.alert svg{width:14px;height:14px;flex-shrink:0}
+.alert-err{background:var(--red-bg);color:var(--red);border:1px solid rgba(139,26,26,.14)}
+.alert.show{display:flex}
+.field{margin-bottom:15px}
+.field label{display:block;font-size:10.5px;font-weight:600;color:var(--ink3);letter-spacing:.08em;margin-bottom:6px;text-transform:uppercase;font-family:var(--f-mono)}
+.field-wrap{position:relative;display:flex;align-items:center}
+.fi{position:absolute;left:12px;width:15px;height:15px;color:var(--ink5);pointer-events:none;flex-shrink:0;transition:color .2s;z-index:1}
+.field-wrap:focus-within .fi{color:var(--gold)}
+input{width:100%;padding:11px 40px 11px 38px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--f-body);font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,129,31,.1);background:#fff}
+input::placeholder{color:var(--ink5);font-size:12px}
+.eye-btn{position:absolute;right:11px;background:none;border:none;cursor:pointer;color:var(--ink5);padding:3px;display:flex;align-items:center;transition:color .2s;z-index:1}
+.eye-btn:hover{color:var(--ink3)}
+.eye-btn svg{width:16px;height:16px}
+.btn{width:100%;padding:13px;background:var(--ink);border:none;border-radius:10px;color:#fff;font-family:var(--f-body);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;letter-spacing:.02em;margin-top:6px}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,129,31,.28),transparent);opacity:0;transition:opacity .2s}
+.btn:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 10px 28px rgba(8,13,26,.28)}
+.btn:hover::after{opacity:1}
+.btn:active{transform:none;box-shadow:none}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-txt{display:block}
+.btn-spin{display:none;width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn.loading .btn-txt{display:none}
+.btn.loading .btn-spin{display:block}
+.lock{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:16px;font-size:10px;color:var(--ink5);font-family:var(--f-mono)}
+.lock svg{width:10px;height:10px;color:var(--green)}
+.foot{text-align:center;margin-top:20px;font-size:10px;color:var(--ink5);font-family:var(--f-mono);letter-spacing:.05em}
+.foot strong{color:var(--gold2);font-weight:500}
+</style>
+</head>
+<body>
+<div class="bg"><div class="bg-grid"></div></div>
+<div class="card">
+
+  <div class="logo-wrap">
+    <img src="christ_logo.png" alt="CHRIST University" class="logo-img"
+      onerror="this.style.display='none';document.getElementById('logo-ph').style.display='flex'">
+    <div class="logo-ph" id="logo-ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      <span>Christ Logo</span>
+    </div>
+  </div>
+
+  <div class="title">Welcome Back</div>
+  <div class="subtitle">Seed Money / MRP Dashboard &mdash; CHRIST University</div>
+  <div class="divider"></div>
+
+  <div class="alert alert-err" id="err-alert">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span id="err-msg">Invalid username or password.</span>
+  </div>
+
+  <div class="field">
+    <label>Username</label>
+    <div class="field-wrap">
+      <svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <input type="text" id="inp-user" placeholder="Enter your username" autocomplete="username" autocapitalize="none" spellcheck="false">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Password</label>
+    <div class="field-wrap">
+      <svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <input type="password" id="inp-pwd" placeholder="Enter your password" autocomplete="current-password">
+      <button class="eye-btn" type="button" onclick="togglePw()" tabindex="-1">
+        <svg id="eye-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button class="btn" id="btn-login" onclick="doLogin()">
+    <span class="btn-txt">Sign In</span>
+    <div class="btn-spin"></div>
+  </button>
+
+  <div class="lock">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Internal Access Only
+  </div>
+
+  <div class="foot">CHRIST University &nbsp;&middot;&nbsp; <strong>Seed Money / MRP Register</strong> &nbsp;&middot;&nbsp; Confidential</div>
+</div>
+
+<script>
+const DASHBOARD_URL = 'index.html';
+const OK_USER       = 'CRP_ADMIN';
+const OK_PASS       = 'CRP_ADMIN@2026';
+const SESSION_KEY   = 'crp_auth';
+
+// Already logged in → go straight to dashboard
+if (localStorage.getItem(SESSION_KEY) === 'true') {
+  window.location.replace(DASHBOARD_URL);
+}
+
+function showErr(msg) {
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-alert').classList.add('show');
+}
+function hideErr() { document.getElementById('err-alert').classList.remove('show'); }
+
+let pwShown = false;
+function togglePw() {
+  pwShown = !pwShown;
+  document.getElementById('inp-pwd').type = pwShown ? 'text' : 'password';
+  document.getElementById('eye-svg').innerHTML = pwShown
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogin() {
+  hideErr();
+  const user = document.getElementById('inp-user').value.trim();
+  const pass = document.getElementById('inp-pwd').value;
+
+  if (!user || !pass) { showErr('Please enter your username and password.'); return; }
+
+  if (user !== OK_USER || pass !== OK_PASS) {
+    const b = document.getElementById('btn-login');
+    b.disabled = true; b.classList.add('loading');
+    setTimeout(() => {
+      b.disabled = false; b.classList.remove('loading');
+      showErr('Invalid username or password. Please try again.');
+    }, 800);
+    return;
+  }
+
+  localStorage.setItem(SESSION_KEY, 'true');
+  window.location.replace(DASHBOARD_URL);
+}
+</script>
+</body>
+</html>

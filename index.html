@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHRIST University — CRP Live Dashboard</title>
+<title>CHRIST University — Seed Money / MRP Live Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -67,13 +67,13 @@ header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .btn-refresh{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);font-family:var(--f-body);font-size:11.5px;font-weight:500;padding:7px 15px;border-radius:99px;cursor:pointer;transition:all .2s;letter-spacing:.02em}
 .btn-refresh:hover{background:rgba(212,160,58,.15);border-color:rgba(212,160,58,.4);color:#fff}
 .btn-refresh:disabled{opacity:.4;cursor:not-allowed}
-.btn-logout{display:flex;align-items:center;gap:6px;background:rgba(139,26,26,.08);border:1px solid rgba(139,26,26,.2);color:rgba(252,165,165,.8);font-family:var(--f-body);font-size:11.5px;font-weight:500;padding:7px 14px;border-radius:99px;cursor:pointer;transition:all .2s}
-.btn-logout:hover{background:rgba(139,26,26,.18);border-color:rgba(220,38,38,.4);color:#fca5a5}
-.btn-logout svg,.btn-refresh svg{width:12px;height:12px}
-.btn-refresh svg{transition:transform .3s}
+.btn-refresh svg{width:12px;height:12px;transition:transform .3s}
 .btn-refresh.spin svg{animation:spinit .7s linear infinite}
 @keyframes spinit{to{transform:rotate(360deg)}}
-.h-kpis{display:grid;grid-template-columns:repeat(7,1fr);position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.04)}
+.btn-logout{display:flex;align-items:center;gap:6px;background:rgba(139,26,26,.08);border:1px solid rgba(139,26,26,.2);color:rgba(252,165,165,.8);font-family:var(--f-body);font-size:11.5px;font-weight:500;padding:7px 14px;border-radius:99px;cursor:pointer;transition:all .2s}
+.btn-logout:hover{background:rgba(139,26,26,.18);border-color:rgba(220,38,38,.4);color:#fca5a5}
+.btn-logout svg{width:12px;height:12px}
+.h-kpis{display:grid;grid-template-columns:repeat(6,1fr);position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.04)}
 .kpi{padding:14px 16px 16px;border-right:1px solid rgba(255,255,255,.04)}
 .kpi:last-child{border-right:none}
 .kpi-val{font-family:var(--f-body);font-size:24px;font-weight:600;color:var(--gold3);line-height:1;letter-spacing:-.01em}
@@ -93,11 +93,10 @@ main{max-width:1560px;margin:0 auto;padding:36px 52px 90px}
 .card:hover{box-shadow:var(--shadow-sm);transform:translateY(-1px)}
 .ch{padding:16px 20px 13px;border-bottom:1px solid rgba(8,13,26,.04);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .ct{font-family:var(--f-display);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:.01em}
+.csub{font-size:10.5px;color:var(--ink4);margin-top:1px}
 .cb{padding:18px 20px}
 .chip{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px;background:var(--gold-pale);color:var(--gold);border:1px solid var(--border-gold);white-space:nowrap;flex-shrink:0;font-family:var(--f-mono)}
-.sel{appearance:none;background:var(--cream);border:1.5px solid var(--border);border-radius:7px;padding:5px 26px 5px 10px;font-family:var(--f-body);font-size:11.5px;font-weight:500;color:var(--ink);cursor:pointer;outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color .2s}
-.sel:focus{border-color:var(--gold);outline:none}
-.sel-sm{font-size:10.5px;padding:4px 24px 4px 9px}
+.cw{position:relative}
 
 /* ── INSIGHT CARDS ── */
 .ig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
@@ -116,97 +115,30 @@ main{max-width:1560px;margin:0 auto;padding:36px 52px 90px}
 .ico-green{background:rgba(20,92,56,.1);color:var(--green2)}
 .ico-blue{background:rgba(27,58,107,.1);color:var(--blue2)}
 .ico-teal{background:rgba(15,118,110,.1);color:var(--teal)}
-.ic-val{font-family:var(--f-display);font-size:32px;font-weight:700;line-height:1;color:var(--ink);letter-spacing:-.02em}
+.ic-val{font-family:var(--f-display);font-size:28px;font-weight:700;line-height:1;color:var(--ink);letter-spacing:-.02em}
 .ic-label{font-size:12px;color:var(--ink3);font-weight:500;margin-top:5px;line-height:1.3}
 .ic-sub{font-size:9.5px;color:var(--ink4);margin-top:2px;font-family:var(--f-mono)}
-.pill{display:inline-flex;align-items:center;gap:3px;font-family:var(--f-mono);font-size:9px;font-weight:500;padding:2px 8px;border-radius:99px;margin-top:8px}
-.pill-up{background:var(--green-bg);color:var(--green2)}
-.pill-dn{background:var(--red-bg);color:var(--red)}
-.pill-neu{background:rgba(8,13,26,.06);color:var(--ink3)}
 @keyframes slideup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── LAYOUT GRIDS ── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:18px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}
-.g6040{display:grid;grid-template-columns:1.65fr 1fr;gap:15px;margin-bottom:18px}
-.g4060{display:grid;grid-template-columns:1fr 1.65fr;gap:15px;margin-bottom:18px}
 
-/* ── YOY ── */
-.yoy-wrap{display:grid;grid-template-columns:1fr 1px 1fr}
-.yc{padding:0 20px}.yc:first-child{padding-left:0}.yc:last-child{padding-right:0}
-.ydiv{background:var(--border)}
-.y-year{font-family:var(--f-display);font-size:19px;font-weight:600;color:var(--ink);margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid var(--gold);display:inline-block}
-.y-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(8,13,26,.04);font-size:11.5px}
-.y-row:last-child{border-bottom:none}
-.y-key{color:var(--ink4);font-weight:400}
-.y-val{font-weight:600;color:var(--ink);font-family:var(--f-mono);font-size:11px}
-.y-val.up{color:var(--green2)}.y-val.dn{color:var(--red)}
+/* ── YEAR TABS (kept, restyled to match gold theme) ── */
+.year-tabs-wrap{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.year-tab{padding:6px 15px;border-radius:99px;border:1.5px solid var(--border);background:var(--white);color:var(--ink3);font-family:var(--f-body);font-size:11.5px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
+.year-tab:hover{border-color:var(--gold);color:var(--gold)}
+.year-tab.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.year-tab-all{background:var(--gold-pale);border-color:var(--border-gold);color:var(--gold)}
+.year-tab-all.active{background:var(--gold);border-color:var(--gold);color:#fff}
 
-/* ── BAR ROWS ── */
-.bar-rows{display:flex;flex-direction:column;gap:5px}
-.bar-row{display:flex;align-items:center;gap:9px;padding:5px 9px;border-radius:7px;border:1px solid transparent;transition:all .15s;cursor:default}
-.bar-row:hover{background:var(--gold-pale);border-color:var(--border-gold)}
-.br-rank{font-family:var(--f-mono);font-size:9.5px;color:var(--ink5);width:16px;flex-shrink:0}
-.br-name{flex:1;font-size:11.5px;font-weight:500;color:var(--ink);line-height:1.3}
-.br-track{width:70px;flex-shrink:0;height:4px;background:rgba(8,13,26,.06);border-radius:2px;overflow:hidden}
-.br-fill{height:100%;border-radius:2px}
-.br-count{font-family:var(--f-mono);font-size:11.5px;font-weight:600;color:var(--ink);width:20px;text-align:right;flex-shrink:0}
-
-/* ── GRANT TYPE BARS ── */
-.gt-rows{display:flex;flex-direction:column;gap:9px}
-.gt-row{display:flex;align-items:center;gap:9px}
-.gt-label{font-size:11.5px;font-weight:500;width:80px;flex-shrink:0}
-.gt-track{flex:1;height:18px;background:rgba(8,13,26,.04);border-radius:4px;overflow:hidden}
-.gt-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:7px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-.gt-fill span{font-size:9px;font-weight:600;color:#fff;white-space:nowrap}
-.gt-stat{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink);width:55px;text-align:right;flex-shrink:0}
-
-/* ── AGENCY ── */
-.ag-rows{display:flex;flex-direction:column;gap:7px}
-.ag-row{display:flex;align-items:center;gap:8px}
-.ag-nm{font-size:10.5px;color:var(--ink);font-weight:500;width:150px;flex-shrink:0;line-height:1.3}
-.ag-track{flex:1;height:13px;background:rgba(8,13,26,.04);border-radius:3px;overflow:hidden}
-.ag-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-.ag-count{font-family:var(--f-mono);font-size:10.5px;color:var(--ink3);width:20px;text-align:right;flex-shrink:0}
-
-/* ── CAMPUS ── */
-.camp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
-.camp-cell{padding:12px 10px;border-radius:9px;text-align:center;background:rgba(8,13,26,.02);border:1px solid var(--border);transition:all .15s;cursor:default}
-.camp-cell:hover{background:var(--gold-pale);border-color:var(--border-gold)}
-.camp-val{font-family:var(--f-display);font-size:25px;font-weight:600;color:var(--ink);line-height:1}
-.camp-name{font-size:9.5px;color:var(--ink3);margin-top:4px;font-weight:500;line-height:1.3}
-.camp-pct{font-family:var(--f-mono);font-size:8.5px;color:var(--ink5);margin-top:2px}
-.camp-stk{height:18px;border-radius:5px;overflow:hidden;display:flex;margin-bottom:9px}
-.camp-seg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:8.5px;font-weight:600;font-family:var(--f-mono)}
-.camp-legend{display:flex;flex-wrap:wrap;gap:7px}
-.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ink4)}
-.leg-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
-.lgd-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:13px}
-.lgd-list li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink3)}
-.lgd-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.lgd-val{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--ink4)}
-
-/* ── DEPT ── */
-.dept-rows{display:flex;flex-direction:column;gap:5px}
-.dept-row{display:flex;align-items:center;gap:7px;padding:4px 7px;border-radius:6px;transition:background .12s;cursor:default}
-.dept-row:hover{background:var(--gold-pale)}
-.dept-nm{font-size:10px;color:var(--ink);font-weight:500;width:155px;flex-shrink:0;line-height:1.3}
-.dept-track{flex:1;height:11px;background:rgba(8,13,26,.04);border-radius:3px;overflow:hidden}
-.dept-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-.dept-count{font-family:var(--f-mono);font-size:10px;color:var(--ink3);width:17px;text-align:right;flex-shrink:0}
-
-/* ── MINI STATS ── */
-.ms-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.ms-cell{padding:11px 12px;border-radius:9px;background:rgba(8,13,26,.025);border:1px solid var(--border);text-align:center}
-.ms-val{font-family:var(--f-display);font-size:21px;font-weight:600;color:var(--ink);line-height:1}
-.ms-lbl{font-size:9px;color:var(--ink4);margin-top:3px;font-weight:500;line-height:1.4}
-
-/* ── TABLE ── */
+/* ── TABLE (matches External exactly) ── */
 .tbl-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--white);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow-xs);margin-bottom:10px;flex-wrap:wrap}
 .tbl-lbl{font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;white-space:nowrap;font-family:var(--f-mono)}
 .tbl-sel{appearance:none;background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:6px 28px 6px 11px;font-family:var(--f-body);font-size:12px;font-weight:500;color:var(--ink);cursor:pointer;outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color .2s}
 .tbl-sel:focus{border-color:var(--gold);outline:none}
-.tbl-search{border:1.5px solid var(--border);border-radius:8px;padding:6px 11px;font-family:var(--f-body);font-size:12px;color:var(--ink);outline:none;background:var(--cream);width:200px;transition:border-color .2s}
+.tbl-sel:disabled{opacity:.45;cursor:not-allowed}
+.tbl-search{border:1.5px solid var(--border);border-radius:8px;padding:6px 11px;font-family:var(--f-body);font-size:12px;color:var(--ink);outline:none;background:var(--cream);width:230px;transition:border-color .2s}
 .tbl-search:focus{border-color:var(--gold)}
 .tbl-count{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--ink3)}
 .tbl-count b{color:var(--ink)}
@@ -215,7 +147,7 @@ main{max-width:1560px;margin:0 auto;padding:36px 52px 90px}
 .btn-xls svg{width:12px;height:12px}
 .btn-ghost-clear{background:transparent;border:1.5px solid var(--border);color:var(--ink3);font-family:var(--f-body);font-size:11.5px;font-weight:500;padding:6px 13px;border-radius:8px;cursor:pointer;transition:all .2s}
 .btn-ghost-clear:hover{border-color:var(--gold);color:var(--gold)}
-.tw{overflow-x:auto;max-height:480px;overflow-y:auto}
+.tw{overflow-x:auto;max-height:520px;overflow-y:auto}
 .tw::-webkit-scrollbar{width:4px;height:4px}
 .tw::-webkit-scrollbar-thumb{background:rgba(8,13,26,.12);border-radius:2px}
 table.dt{width:100%;border-collapse:collapse}
@@ -225,27 +157,20 @@ table.dt th{padding:9px 12px;text-align:left;font-size:9px;font-weight:600;lette
 table.dt tbody tr{border-bottom:1px solid rgba(8,13,26,.04);transition:background .12s}
 table.dt tbody tr:hover{background:rgba(184,129,31,.04)}
 table.dt td{padding:9px 12px;font-size:11.5px;color:var(--ink3);vertical-align:top;max-width:280px;white-space:normal;word-wrap:break-word;overflow-wrap:break-word;line-height:1.45}
-table.dt td:nth-child(7){max-width:340px}  /* Title column gets more room */table.dt td:first-child{color:var(--ink);font-weight:500}
+table.dt td:first-child{color:var(--ink);font-weight:500}
+table.dt td.td-title{max-width:320px}
 .tbl-empty{text-align:center;padding:44px 24px;color:var(--ink4);font-size:13px}
 .pub-hit{margin-bottom:4px}
 .pub-hit:last-child{margin-bottom:0}
 .pub-hit b{color:var(--ink);font-size:11px}
 .pub-stat{display:block;font-family:var(--f-mono);font-size:9.5px;color:var(--teal);margin-top:1px}
 .pub-none{color:var(--ink5)}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:500;font-family:var(--f-mono)}
-.b-on{background:var(--green-bg);color:var(--green2)}
-.b-co{background:var(--blue-bg);color:var(--blue)}
-.b-pr{background:#EEF2FF;color:#4338CA}
-.b-pg{background:var(--orange-bg);color:var(--orange)}
-.b-fe{background:var(--purple-bg);color:var(--purple2)}
-.cw{position:relative}
 footer{background:var(--ink);color:rgba(255,255,255,.22);text-align:center;padding:18px 52px;font-size:10.5px;letter-spacing:.06em;font-family:var(--f-mono)}
 footer strong{color:var(--gold2)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media(max-width:1200px){
-  .ig-grid,.g2,.g3,.g6040,.g4060{grid-template-columns:1fr}
-  .h-kpis{grid-template-columns:repeat(4,1fr)}
-  .yoy-wrap{grid-template-columns:1fr}.ydiv{display:none}.yc{padding:0;margin-bottom:14px}
+  .ig-grid,.g2,.g3{grid-template-columns:1fr}
+  .h-kpis{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:740px){
   .h-kpis{grid-template-columns:repeat(2,1fr)}
@@ -264,7 +189,7 @@ footer strong{color:var(--gold2)}
       onerror="this.style.display='none';document.getElementById('ov-fallback').style.display='block'">
     <svg id="ov-fallback" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
   </div>
-  <div class="ov-title">CHRIST University — CRP</div>
+  <div class="ov-title">CHRIST University — Seed Money</div>
   <div class="ov-sub">Fetching live register data…</div>
   <div class="ov-track"><div class="ov-fill"></div></div>
 </div>
@@ -273,7 +198,7 @@ footer strong{color:var(--gold2)}
 <div id="err">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
   <span id="err-msg">Could not load data.</span>
-  <button class="err-retry" onclick="load()">Retry</button>
+  <button class="err-retry" onclick="loadData()">Retry</button>
 </div>
 
 <!-- HEADER -->
@@ -289,14 +214,14 @@ footer strong{color:var(--gold2)}
         </div>
         <div>
           <div class="h-name">CHRIST University</div>
-          <div class="h-caption">Centre for Research &amp; Projects &middot; Externally Funded Projects Register</div>
+          <div class="h-caption">Centre for Research &amp; Projects &middot; Seed Money &amp; MRP Programme</div>
         </div>
       </div>
       <div class="h-actions">
         <span class="tag tag-gold" id="h-yr-range">—</span>
-        <span class="tag tag-green"><span class="tag-dot"></span>Live · CRP Register</span>
-        <span class="h-time" id="h-date">—</span>
-        <button class="btn-refresh" id="btn-r" onclick="load(true)">
+        <span class="tag tag-green"><span class="tag-dot"></span>Live · Seed Money Register</span>
+        <span class="h-time" id="lastSync">—</span>
+        <button class="btn-refresh" id="btn-r" onclick="loadData()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
           Refresh
         </button>
@@ -314,115 +239,43 @@ footer strong{color:var(--gold2)}
 <main>
   <div class="ig-grid" id="ig-grid"></div>
 
-  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Project Growth Trajectory</span><span class="sec-rule"></span></div>
-  <div class="card" style="margin-bottom:18px">
-    <div class="ch"><span class="ct">Annual Volume &amp; Growth Trend — All Years</span><span class="chip" id="trend-chip">—</span></div>
-    <div class="cb"><div class="cw" style="height:275px"><canvas id="cChart"></canvas></div></div>
-  </div>
-
-  <div class="sec"><span class="sec-accent"></span><span class="sec-title" id="yoy-sec-title">Year-on-Year Comparison &amp; Grant Mix</span><span class="sec-rule"></span></div>
-  <div class="g6040">
-    <div class="card">
-      <div class="ch"><span class="ct" id="yoy-card-title">Latest 2 Years Breakdown</span><span class="chip" id="yoy-chip">Latest 2 Years</span></div>
-      <div class="cb"><div class="yoy-wrap" id="yoy"></div></div>
-    </div>
-    <div class="card">
-      <div class="ch">
-        <span class="ct">Grant Type Distribution</span>
-        <select class="sel sel-sm" id="gt-yr" onchange="renderGT()"></select>
-      </div>
-      <div class="cb">
-        <div class="gt-rows" id="gt-rows"></div>
-        <div style="margin-top:15px;padding-top:13px;border-top:1px solid var(--border)">
-          <div class="cw" style="height:148px"><canvas id="gtDonut"></canvas></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec"><span class="sec-accent"></span><span class="sec-title">School-wise &amp; Agency Analysis</span><span class="sec-rule"></span></div>
-  <div class="g4060">
-    <div class="card">
-      <div class="ch">
-        <span class="ct">Projects by School</span>
-        <select class="sel sel-sm" id="sch-yr" onchange="renderSchools()"></select>
-      </div>
-      <div class="cb"><div class="bar-rows" id="sch-rows"></div></div>
-    </div>
-    <div class="card">
-      <div class="ch">
-        <span class="ct">Agency Type Distribution</span>
-        <select class="sel sel-sm" id="ag-yr" onchange="renderAgency()"></select>
-      </div>
-      <div class="cb">
-        <div class="cw" style="height:190px"><canvas id="agBar"></canvas></div>
-        <ul class="lgd-list" id="ag-lgd"></ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Campus Distribution &amp; Top Funding Agencies</span><span class="sec-rule"></span></div>
+  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Financial &amp; Volume Overview</span><span class="sec-rule"></span></div>
   <div class="g2">
     <div class="card">
-      <div class="ch">
-        <span class="ct">Projects by Campus</span>
-        <select class="sel sel-sm" id="camp-yr" onchange="renderCampus()"></select>
-      </div>
-      <div class="cb">
-        <div class="camp-grid" id="camp-grid"></div>
-        <div class="camp-stk" id="camp-stk"></div>
-        <div class="camp-legend" id="camp-legend"></div>
-      </div>
+      <div class="ch"><span class="ct">Annual Funding Disbursement</span><span class="chip">₹ Lakhs / Year</span></div>
+      <div class="cb"><div class="cw" style="height:260px"><canvas id="cFundYear"></canvas></div></div>
     </div>
     <div class="card">
-      <div class="ch">
-        <span class="ct">Top Funding Agencies</span>
-        <select class="sel sel-sm" id="fnd-yr" onchange="renderFunders()"></select>
-      </div>
-      <div class="cb"><div class="ag-rows" id="fnd-list"></div></div>
+      <div class="ch"><span class="ct">Project Volume by Year</span><span class="chip">Sanctioned Count</span></div>
+      <div class="cb"><div class="cw" style="height:260px"><canvas id="cProjYear"></canvas></div></div>
     </div>
   </div>
 
-  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Departmental Breakdown &amp; School Radar</span><span class="sec-rule"></span></div>
+  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Departmental &amp; Investigator Analysis</span><span class="sec-rule"></span></div>
   <div class="g3">
     <div class="card">
-      <div class="ch">
-        <span class="ct">Top Departments</span>
-        <select class="sel sel-sm" id="dept-yr" onchange="renderDepts()"></select>
-      </div>
-      <div class="cb"><div class="dept-rows" id="dept-rows"></div></div>
+      <div class="ch"><span class="ct">Top Departments</span><span class="chip">By Projects</span></div>
+      <div class="cb"><div class="cw" style="height:320px"><canvas id="cDeptCount"></canvas></div></div>
     </div>
     <div class="card">
-      <div class="ch"><span class="ct">School Radar</span><span class="chip" id="radar-chip">Latest 2 Years</span></div>
-      <div class="cb"><div class="cw" style="height:270px"><canvas id="radar"></canvas></div></div>
+      <div class="ch"><span class="ct">Top Departments</span><span class="chip">By Funding</span></div>
+      <div class="cb"><div class="cw" style="height:320px"><canvas id="cDeptFund"></canvas></div></div>
     </div>
     <div class="card">
-      <div class="ch"><span class="ct">Status &amp; Overview</span><span class="chip">Both Years</span></div>
-      <div class="cb">
-        <div style="margin-bottom:12px">
-          <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--ink4);margin-bottom:8px;font-family:var(--f-mono)" id="st-lbl-prev">Previous Year Status</div>
-          <div class="cw" style="height:95px"><canvas id="st25"></canvas></div>
-        </div>
-        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:12px">
-          <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--ink4);margin-bottom:8px;font-family:var(--f-mono)" id="st-lbl-latest">Latest Year Status</div>
-          <div class="cw" style="height:95px"><canvas id="st26"></canvas></div>
-        </div>
-        <div style="border-top:1px solid var(--border);padding-top:12px">
-          <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--ink4);margin-bottom:10px;font-family:var(--f-mono)">Quick Summary</div>
-          <div class="ms-grid" id="ms-grid"></div>
-        </div>
-      </div>
+      <div class="ch"><span class="ct">Top Principal Investigators</span><span class="chip">By Funding</span></div>
+      <div class="cb"><div class="cw" style="height:320px"><canvas id="cPI"></canvas></div></div>
     </div>
   </div>
 
-  <!-- Table -->
+  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Filter by Year</span><span class="sec-rule"></span></div>
+  <div class="year-tabs-wrap" id="yearTabs"></div>
+
+  <!-- Table (structure matches the External Projects dashboard) -->
   <div class="sec"><span class="sec-accent"></span><span class="sec-title">Year-wise Project Register</span><span class="sec-rule"></span></div>
   <div class="tbl-bar">
-    <span class="tbl-lbl">Year</span>
-    <select id="tbl-yr" class="tbl-sel" onchange="renderTable()"></select>
     <span class="tbl-lbl">Dept</span>
     <select id="tbl-dept" class="tbl-sel" onchange="renderTable()"><option value="">All Departments</option></select>
-    <input class="tbl-search" id="tbl-q" placeholder="Search projects, faculty, dept…" oninput="renderTable()">
+    <input class="tbl-search" id="tbl-q" placeholder="Search PI, title, approval number…" oninput="renderTable()">
     <button class="btn-ghost-clear" onclick="clearTableFilters()">Clear</button>
     <div class="tbl-count"><b id="tbl-n">—</b> records</div>
     <button class="btn-xls" onclick="exportTable()">
@@ -451,37 +304,38 @@ function doLogout() {
   window.location.replace(LOGIN_URL);
 }
 
-// ── REPLACE WITH YOUR DEPLOYED APPS SCRIPT URL ──
-const API = 'https://script.google.com/macros/s/AKfycbxLUnIb3c1IfhopoIXtEAqADMQgoyO7UqE9INIgg5vUGrxvHdptLkEgByrm2GMfMbVGHA/exec';
+// ── CONFIGURATION ──
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYRO_lCp5sWlfEEUkvU38L51G7tBH2ZZj6Tbl93bx2RsADpqtKVtqhLTiux5naqA0e/exec';
 const PUB_API = 'https://script.google.com/macros/s/AKfycbyhWxHz69rwJxLLV7ST6XBbDi39OiFWm5DlKCt8h1X8dBpGPKG5C8rQHtNFWR6JeprwXw/exec';
 
-// ── COLOURS ────────────────────────────────────────────────────
+// ── COLOURS (identical palette to the External Projects dashboard) ──
 const C = {
   ink:'#080D1A',ink2:'#1A2236',ink3:'#374159',ink4:'#64748B',
   gold:'#B8811F',gold2:'#D4A03A',gold3:'#F0C060',
   green:'#145C38',green2:'#18794E',
   blue:'#1B3A6B',blue2:'#2563EB',
   red:'#8B1A1A',teal:'#0F766E',orange:'#92400E',purple:'#4C1D95',purple2:'#7C3AED',slate:'#94A3B8',
-  palette:['#080D1A','#B8811F','#145C38','#1B3A6B','#92400E','#4C1D95','#0F766E','#7C3AED','#374159','#1971c2','#be185d','#0369a1'],
-  camp:['#080D1A','#B8811F','#145C38','#1B3A6B','#94A3B8','#92400E','#0F766E'],
-  agency:{GoI:'#080D1A',GoK:'#B8811F',IG:'#145C38',ING:'#1B3A6B',NNG:'#92400E'}
+  palette:['#080D1A','#B8811F','#145C38','#1B3A6B','#92400E','#4C1D95','#0F766E','#7C3AED','#374159','#1971c2','#be185d','#0369a1']
 };
-const AGENCY_LABELS = {GoI:'Govt of India',GoK:'Govt of Karnataka',IG:'Intl Government',ING:'Intl Non-Government',NNG:'Natl Non-Government'};
-
 Chart.defaults.font.family = "'DM Sans',sans-serif";
 Chart.defaults.color = '#374159';
-
 function tt(){return{backgroundColor:'#fff',titleColor:C.ink,bodyColor:C.ink3,borderColor:'rgba(8,13,26,.1)',borderWidth:1,padding:11,cornerRadius:8,boxPadding:4,titleFont:{family:"'Cormorant Garamond',serif",size:13,weight:600},bodyFont:{family:"'DM Sans',sans-serif",size:11}}}
-function fmtINR(n){if(!n||n===0)return'—';if(n>=1e7)return'₹'+(n/1e7).toFixed(2)+' Cr';if(n>=1e5)return'₹'+(n/1e5).toFixed(1)+' L';return'₹'+Math.round(n).toLocaleString('en-IN')}
 function dc(c){if(c)try{c.destroy()}catch(e){}}
+function fmtINR(n){if(!n)return'₹0';if(n>=1e7)return'₹'+(n/1e7).toFixed(2)+' Cr';if(n>=1e5)return'₹'+(n/1e5).toFixed(1)+' L';return'₹'+Math.round(n).toLocaleString('en-IN')}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function h(s){ return esc(s); }
 
-let D = null, tblCache = {};
-let cC=null,gtC=null,agC=null,radC=null,st25C=null,st26C=null;
+// ── STATE ──
+let ALL      = [];
+let FILTERED = [];
+let ACTIVE_YEAR = null;
+let CHARTS   = {};
+let YEARS    = [];
+let TBL_EXPORT = null;
 
 // ══════════════════════════════════════════════════════════════
-// PUBLICATIONS MATCHING (added) — PI-only, matched against the
-// Publications roster. Co-Investigators are intentionally ignored
-// per the agreed scope: only "the PI" is looked up.
+// PUBLICATIONS MATCHING — PI-only, matched against the Publications
+// roster. Co-Investigators are intentionally ignored, per scope.
 // ══════════════════════════════════════════════════════════════
 let PUB_FACULTY = [], PUB_EXACT = {}, PUB_LIST = [];
 function stripTitles(s){
@@ -550,393 +404,17 @@ function matchPub(rawName){
   if(bestC && bestCScore>=0.86) return bestC.rec;
   return null;
 }
-// Returns compact HTML for a PI cell's Publications column: looks up every
-// name found in the PI field (a cell can contain more than one person), and
-// shows each match found. Co-Investigator fields are never consulted.
 function pubCellHtml(piRaw){
-  if(!piRaw) return '—';
+  if(!piRaw) return '<span class="pub-none">—</span>';
   const names = splitNames(piRaw);
-  if(!names.length) return '—';
+  if(!names.length) return '<span class="pub-none">—</span>';
   const parts = [];
   names.forEach(n=>{
     const m = matchPub(n);
-    if(m) parts.push('<div class="pub-hit"><b>'+esc(m.name)+'</b><span class="pub-stat">Scopus '+m.scopus+' · WoS '+m.wos+' · Total <b>'+m.total+'</b></span></div>');
+    if(m) parts.push('<div class="pub-hit"><b>'+esc(m.name)+'</b><span class="pub-stat">Scopus '+m.scopus+' &middot; WoS '+m.wos+' &middot; Total '+m.total+'</span></div>');
   });
   return parts.length ? parts.join('') : '<span class="pub-none">—</span>';
 }
-function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-// Helpers to get the two most-recent years with full data
-function getLatestYear() { return D && D.latestYear || null; }
-function getPrevYear()   { return D && D.prevYear   || null; }
-function getRecentData(yr){ return (D && D.recentData && D.recentData[yr]) || {}; }
-
-// ── Populate all dropdowns from the dynamic year list ─────────
-function populateDropdowns(){
-  if(!D) return;
-  const allYears    = D.allYears    || [];
-  const recentYears = D.recentYears || [];
-  const latest      = getLatestYear();
-
-  // Table dropdown — all years, select latest
-  const tblSel = document.getElementById('tbl-yr');
-  tblSel.innerHTML = allYears.map(y =>
-    `<option value="${y}"${y===latest?' selected':''}>${y.replace('–','&ndash;')}</option>`
-  ).join('');
-
-  // All per-section selects — only recent years, select latest
-  ['gt-yr','sch-yr','ag-yr','camp-yr','fnd-yr','dept-yr'].forEach(id => {
-    const el = document.getElementById(id);
-    el.innerHTML = recentYears.slice().reverse().map(y =>
-      `<option value="${y}"${y===latest?' selected':''}>${y.replace('–','&ndash;')}</option>`
-    ).join('');
-  });
-}
-
-// ── LOAD ──────────────────────────────────────────────────────
-async function load(isRefresh=false){
-  const btn=document.getElementById('btn-r'),ov=document.getElementById('ov'),errEl=document.getElementById('err');
-  errEl.style.display='none';
-  if(isRefresh){btn.classList.add('spin');btn.disabled=true;}else{ov.classList.remove('gone');}
-  try{
-const r=await fetch(API+'?action=dashboard&t='+Date.now(), {cache:'no-store'});    if(!r.ok) throw new Error('HTTP '+r.status);
-    const j=await r.json();
-    if(j.error) throw new Error(j.error);
-    D=j; tblCache={};
-    // Fetch Publications roster in parallel with the rest of the render —
-    // failure here should not block the core dashboard from showing.
-    try{
-      const pr = await fetch(PUB_API+'?action=all&t='+Date.now(), {cache:'no-store'});
-      const pj = await pr.json();
-      if(!pj.error){ PUB_FACULTY = pj.faculty||[]; buildPubIndex(); }
-    }catch(pe){ console.warn('Publications fetch failed (non-fatal):', pe); }
-    populateDropdowns();
-    renderAll();
-    document.getElementById('h-date').textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    ov.classList.add('gone');
-  }catch(e){
-    console.error(e);ov.classList.add('gone');
-    errEl.style.display='flex';
-    document.getElementById('err-msg').textContent='Error: '+e.message;
-  }finally{btn.classList.remove('spin');btn.disabled=false;}
-}
-
-function renderAll(){
-  if(!D) return;
-  renderKPIs(); renderInsights(); renderCombined(); renderYoY(); renderGT();
-  renderSchools(); renderAgency(); renderCampus(); renderFunders();
-  renderDepts(); renderRadar(); renderStatus(); renderTable();
-}
-
-// ── KPI STRIP ─────────────────────────────────────────────────
-function renderKPIs(){
-  const latest = getLatestYear(), prev = getPrevYear();
-  const yL = getRecentData(latest), yP = getRecentData(prev);
-  const allYears = D.allYears || [];
-  const tot = Object.values(D.yearCounts||{}).reduce((a,b)=>a+b,0);
-  const intlP=(yP.agencyType?.IG||0)+(yP.agencyType?.ING||0);
-  const intlL=(yL.agencyType?.IG||0)+(yL.agencyType?.ING||0);
-
-  // Dynamic year range tag
-  const firstYr = allYears[0]||'—', lastYr = allYears[allYears.length-1]||'—';
-  const rangeStr = firstYr.slice(0,4)+'–'+lastYr.slice(-2);
-  document.getElementById('h-yr-range').textContent = rangeStr;
-  document.getElementById('ft-range').textContent = rangeStr;
-
-  const items=[
-    {v:tot,                  l:'Total Projects',              s:'All years combined'},
-    {v:yP.total||0,          l:`Grants ${prev||'—'}`,        s:'Academic year'},
-    {v:yL.total||0,          l:`Grants ${latest||'—'}`,      s:'Academic year'},
-    {v:fmtINR(yP.amount||0), l:`Sanctioned ${prev||'—'}`,    s:'Verified total'},
-    {v:fmtINR(yL.amount||0), l:`Sanctioned ${latest||'—'}`,  s:'Verified total'},
-    {v:(yP.agencyType?.GoI||0)+'/'+(yL.agencyType?.GoI||0),  l:'GoI Funded', s:`${prev||'—'} / ${latest||'—'}`},
-    {v:intlP+'/'+intlL,      l:'International',               s:`IG+ING · ${prev||'—'} / ${latest||'—'}`},
-  ];
-  document.getElementById('h-kpis').innerHTML=items.map(m=>
-    `<div class="kpi"><div class="kpi-val">${m.v}</div><div class="kpi-lbl">${m.l}</div><div class="kpi-sub">${m.s}</div></div>`
-  ).join('');
-}
-
-// ── INSIGHTS ──────────────────────────────────────────────────
-function renderInsights(){
-  const latest=getLatestYear(), prev=getPrevYear();
-  const yL=getRecentData(latest), yP=getRecentData(prev);
-  const amtG=yP.amount?Math.round((yL.amount-yP.amount)/yP.amount*100):0;
-  const iP=(yP.agencyType?.ING||0)+(yP.agencyType?.IG||0);
-  const iL=(yL.agencyType?.ING||0)+(yL.agencyType?.IG||0);
-  const gP=Math.round((yP.agencyType?.GoI||0)/(yP.total||1)*100);
-  const gL=Math.round((yL.agencyType?.GoI||0)/(yL.total||1)*100);
-  const intlShift=iL-iP;
-  const cards=[
-    {v:fmtINR(Math.abs((yL.amount||0)-(yP.amount||0))),l:'YoY Amount Growth',s:`${latest} over ${prev}`,cls:'ic-gold',ico:'ico-gold',dl:amtG>=0?`+${amtG}%`:`${amtG}%`,up:amtG>=0,svg:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
-    {v:`${(yP.schools||[]).length} / ${(yL.schools||[]).length}`,l:'Schools Active',s:`${prev} / ${latest}`,cls:'ic-green',ico:'ico-green',dl:'Multi-campus',neu:true,svg:'<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'},
-    {v:`${iP} / ${iL}`,l:'International Projects',s:`IG + ING · ${prev} / ${latest}`,cls:'ic-blue',ico:'ico-blue',dl:intlShift>=0?`+${intlShift} in ${latest}`:`${iL} in ${latest}`,up:intlShift>=0,svg:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'},
-    {v:`${gP}% / ${gL}%`,l:'GoI Funding Share',s:`${prev} / ${latest} of total`,cls:'ic-teal',ico:'ico-teal',dl:`${gL>=gP?'+':'-'}${Math.abs(gL-gP)}pp`,up:gL>=gP,svg:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
-  ];
-  document.getElementById('ig-grid').innerHTML=cards.map(c=>{
-    const dh=c.neu?`<span class="pill pill-neu">${c.dl}</span>`:`<span class="pill ${c.up?'pill-up':'pill-dn'}">${c.up?'↑':'↓'} ${c.dl}</span>`;
-    return`<div class="ic ${c.cls}"><div class="ic-icon ${c.ico}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.svg}</svg></div><div class="ic-val">${c.v}</div><div class="ic-label">${c.l}</div><div class="ic-sub">${c.s}</div>${dh}</div>`;
-  }).join('');
-}
-
-// ── COMBINED CHART ────────────────────────────────────────────
-function renderCombined(){
-  const yL=Object.keys(D.yearCounts||{}), yV=Object.values(D.yearCounts||{});
-  document.getElementById('trend-chip').textContent=yL.length+' Academic Years';
-  dc(cC);
-  const ctx=document.getElementById('cChart').getContext('2d');
-  const lg=ctx.createLinearGradient(0,0,0,275);
-  lg.addColorStop(0,'rgba(184,129,31,.15)'); lg.addColorStop(1,'rgba(184,129,31,0)');
-  // Highlight the last 2 years (most recent) in gold
-  cC=new Chart(ctx,{data:{labels:yL,datasets:[
-    {type:'bar',label:'Grant Count',data:yV,backgroundColor:yL.map((_,i)=>i>=yL.length-2?C.gold2:'rgba(26,34,54,.7)'),borderRadius:5,borderSkipped:false,yAxisID:'y',order:2},
-    {type:'line',label:'Trend',data:yV,borderColor:C.gold,backgroundColor:lg,borderWidth:2,pointBackgroundColor:C.gold,pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:4.5,pointHoverRadius:6,fill:true,tension:0.4,yAxisID:'y',order:1},
-  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:14,usePointStyle:true}},tooltip:{...tt(),callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}`}}},
-    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:10.5}}},y:{grid:{color:'rgba(8,13,26,.05)'},border:{display:false},ticks:{font:{size:10.5}},title:{display:true,text:'Number of Grants',font:{size:9},color:C.ink4}}}}});
-}
-
-// ── YOY ───────────────────────────────────────────────────────
-function renderYoY(){
-  const latest=getLatestYear(), prev=getPrevYear();
-  const yL=getRecentData(latest), yP=getRecentData(prev);
-  document.getElementById('yoy-card-title').textContent=`${prev} vs ${latest} Breakdown`;
-  document.getElementById('yoy-chip').textContent='Latest 2 Years';
-
-  const g5=yP.grantTypes||{}, g6=yL.grantTypes||{};
-  const a5=yP.agencyType||{}, a6=yL.agencyType||{};
-  const s5=yP.status||{}, s6=yL.status||{};
-  const pairs=[
-    ['Total Grants',     yP.total||0,                                                yL.total||0],
-    ['Programs',         g5.Program||0,                                              g6.Program||0],
-    ['Projects',         g5.Project||0,                                              g6.Project||0],
-    ['Fellowships',      g5.Fellowship||0,                                           g6.Fellowship||0],
-    ['GoI Funded',       `${a5.GoI||0} (${Math.round((a5.GoI||0)/(yP.total||1)*100)}%)`, `${a6.GoI||0} (${Math.round((a6.GoI||0)/(yL.total||1)*100)}%)`],
-    ['GoK Funded',       a5.GoK||0,                                                  a6.GoK||0],
-    ['Intl Government',  a5.IG||0,                                                   a6.IG||0],
-    ['Intl Non-Govt',    a5.ING||0,                                                  a6.ING||0],
-    ['Natl Non-Govt',    a5.NNG||0,                                                  a6.NNG||0],
-    ['Ongoing',          s5.Ongoing||0,                                              s6.Ongoing||0],
-    ['Completed',        s5.Completed||0,                                            s6.Completed||0],
-    ['Amt Sanctioned',   fmtINR(yP.amount||0),                                      fmtINR(yL.amount||0)],
-  ];
-  let c1='',c2='';
-  pairs.forEach(([k,v1,v2])=>{
-    c1+=`<div class="y-row"><span class="y-key">${k}</span><span class="y-val">${v1}</span></div>`;
-    const up=typeof v1==='number'&&typeof v2==='number'?v2>v1:null;
-    c2+=`<div class="y-row"><span class="y-key">${k}</span><span class="y-val ${up===null?'':(up?'up':'dn')}">${v2}</span></div>`;
-  });
-  document.getElementById('yoy').innerHTML=
-    `<div class="yc"><div class="y-year">${prev||'—'}</div>${c1}</div>` +
-    `<div class="ydiv"></div>` +
-    `<div class="yc"><div class="y-year">${latest||'—'}</div>${c2}</div>`;
-}
-
-// ── GRANT TYPE ────────────────────────────────────────────────
-function renderGT(){
-  const yr=document.getElementById('gt-yr').value;
-  const gt=getRecentData(yr).grantTypes||{};
-  const tot=(gt.Project||0)+(gt.Program||0)+(gt.Fellowship||0)||1;
-  const mx=Math.max(gt.Project||0,gt.Program||0,gt.Fellowship||0)||1;
-  const items=[{l:'Programs',n:gt.Program||0,col:C.orange},{l:'Projects',n:gt.Project||0,col:C.blue},{l:'Fellowships',n:gt.Fellowship||0,col:C.purple2}];
-  document.getElementById('gt-rows').innerHTML=items.map(it=>{
-    const bw=Math.round(it.n/mx*100),pct=Math.round(it.n/tot*100);
-    return`<div class="gt-row"><div class="gt-label" style="color:${it.col}">${it.l}</div><div class="gt-track"><div class="gt-fill" style="width:${bw}%;background:${it.col}"><span>${it.n>0?it.n:''}</span></div></div><div class="gt-stat">${it.n} <span style="color:var(--ink4);font-size:9px">(${pct}%)</span></div></div>`;
-  }).join('');
-  dc(gtC);
-  gtC=new Chart(document.getElementById('gtDonut'),{type:'doughnut',data:{labels:items.map(i=>i.l),datasets:[{data:items.map(i=>i.n),backgroundColor:[C.orange,C.blue,C.purple2],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom',labels:{font:{size:10.5},padding:9,usePointStyle:true}},tooltip:tt()}}});
-}
-
-// ── SCHOOLS ───────────────────────────────────────────────────
-function renderSchools(){
-  const yr=document.getElementById('sch-yr').value;
-  const s=getRecentData(yr).schools||[];
-  const mx=s[0]?.count||1;
-  document.getElementById('sch-rows').innerHTML=s.map((x,i)=>{
-    const col=C.palette[i%C.palette.length],pct=Math.round(x.count/mx*100);
-    return`<div class="bar-row"><span class="br-rank">#${i+1}</span><span class="br-name">${x.name}</span><div class="br-track"><div class="br-fill" style="width:${pct}%;background:${col}"></div></div><span class="br-count">${x.count}</span></div>`;
-  }).join('');
-}
-
-// ── AGENCY ────────────────────────────────────────────────────
-function renderAgency(){
-  const yr=document.getElementById('ag-yr').value;
-  const ag=getRecentData(yr).agencyType||{};
-  const order=['GoI','GoK','IG','ING','NNG'];
-  const agL=order.filter(k=>ag[k]>0);
-  const agV=agL.map(k=>ag[k]);
-  const agCol=agL.map(k=>C.agency[k]||C.slate);
-  dc(agC);
-  agC=new Chart(document.getElementById('agBar'),{type:'bar',data:{labels:agL.map(k=>AGENCY_LABELS[k]||k),datasets:[{label:'Projects',data:agV,backgroundColor:agCol,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{...tt(),callbacks:{label:c=>` ${c.parsed.x} projects`}}},scales:{x:{grid:{color:'rgba(8,13,26,.05)'},border:{display:false},ticks:{font:{size:10.5}}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:11}}}}}});
-  const agT=agV.reduce((a,b)=>a+b,0)||1;
-  document.getElementById('ag-lgd').innerHTML=agL.map((l,i)=>`<li><span class="lgd-dot" style="background:${agCol[i]}"></span>${AGENCY_LABELS[l]||l}<span class="lgd-val">${agV[i]} · ${Math.round(agV[i]/agT*100)}%</span></li>`).join('');
-}
-
-// ── CAMPUS ────────────────────────────────────────────────────
-function renderCampus(){
-  const yr=document.getElementById('camp-yr').value;
-  const camp=getRecentData(yr).campus||[];
-  const tot=camp.reduce((a,c)=>a+c.count,0)||1;
-  document.getElementById('camp-grid').innerHTML=camp.map((c,i)=>`<div class="camp-cell"><div class="camp-val">${c.count}</div><div class="camp-name">${c.name}</div><div class="camp-pct">${Math.round(c.count/tot*100)}%</div></div>`).join('');
-  document.getElementById('camp-stk').innerHTML=camp.map((c,i)=>{const pct=Math.round(c.count/tot*100);return`<div class="camp-seg" style="flex:${pct};background:${C.camp[i%C.camp.length]}">${c.count>3?c.count:''}</div>`;}).join('');
-  document.getElementById('camp-legend').innerHTML=camp.map((c,i)=>`<span class="leg-item"><span class="leg-dot" style="background:${C.camp[i%C.camp.length]}"></span>${c.name}: ${c.count}</span>`).join('');
-}
-
-// ── FUNDERS ───────────────────────────────────────────────────
-function renderFunders(){
-  const yr=document.getElementById('fnd-yr').value;
-  const f=getRecentData(yr).topFunders||[];
-  const mx=f[0]?.count||1;
-  document.getElementById('fnd-list').innerHTML=f.map((x,i)=>{
-    const col=C.palette[i%C.palette.length],pct=Math.round(x.count/mx*100);
-    const lbl=x.name.length>64?x.name.slice(0,63)+'…':x.name;
-    return`<div class="ag-row"><div class="ag-nm" title="${x.name}">${lbl}</div><div class="ag-track"><div class="ag-fill" style="width:${pct}%;background:${col}"></div></div><div class="ag-count">${x.count}</div></div>`;
-  }).join('');
-}
-
-// ── DEPARTMENTS ───────────────────────────────────────────────
-function renderDepts(){
-  const yr=document.getElementById('dept-yr').value;
-  const dep=getRecentData(yr).departments||[];
-  if(!dep.length){document.getElementById('dept-rows').innerHTML='<div style="color:var(--ink4);font-size:12px;padding:24px 0;text-align:center">No department data</div>';return;}
-  const mx=dep[0].count||1;
-  document.getElementById('dept-rows').innerHTML=dep.map((d,i)=>{
-    const col=C.palette[i%C.palette.length],pct=Math.round(d.count/mx*100);
-    return`<div class="dept-row"><div class="dept-nm" title="${d.name}">${d.name.length>28?d.name.slice(0,27)+'…':d.name}</div><div class="dept-track"><div class="dept-fill" style="width:${pct}%;background:${col}"></div></div><div class="dept-count">${d.count}</div></div>`;
-  }).join('');
-}
-
-// ── RADAR ─────────────────────────────────────────────────────
-function renderRadar(){
-  const latest=getLatestYear(), prev=getPrevYear();
-  const s5=getRecentData(prev).schools||[], s6=getRecentData(latest).schools||[];
-  document.getElementById('radar-chip').textContent=`${prev} vs ${latest}`;
-  const names=[...new Set([...s5.map(s=>s.name),...s6.map(s=>s.name)])].slice(0,9);
-  dc(radC);
-  radC=new Chart(document.getElementById('radar'),{type:'radar',data:{labels:names.map(s=>s.length>14?s.slice(0,13)+'…':s),datasets:[
-    {label:prev,data:names.map(n=>s5.find(s=>s.name===n)?.count||0),borderColor:C.ink,backgroundColor:'rgba(8,13,26,.07)',borderWidth:1.8,pointBackgroundColor:C.ink,pointRadius:3},
-    {label:latest,data:names.map(n=>s6.find(s=>s.name===n)?.count||0),borderColor:C.gold,backgroundColor:'rgba(184,129,31,.1)',borderWidth:1.8,pointBackgroundColor:C.gold,pointRadius:3},
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:10,usePointStyle:true}},tooltip:tt()},scales:{r:{grid:{color:'rgba(8,13,26,.07)'},ticks:{display:false},pointLabels:{font:{size:9.5}}}}}});
-}
-
-// ── STATUS ────────────────────────────────────────────────────
-function renderStatus(){
-  const latest=getLatestYear(), prev=getPrevYear();
-  const sP=getRecentData(prev).status||{}, sL=getRecentData(latest).status||{};
-  document.getElementById('st-lbl-prev').textContent  = (prev   ||'Previous Year')+' Project Status';
-  document.getElementById('st-lbl-latest').textContent= (latest ||'Latest Year')  +' Project Status';
-  function mk(id,st,prev){dc(prev);return new Chart(document.getElementById(id),{type:'doughnut',data:{labels:['Ongoing','Completed'],datasets:[{data:[st.Ongoing||0,st.Completed||0],backgroundColor:[C.green2,C.blue],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'right',labels:{font:{size:10.5},padding:7,usePointStyle:true}},tooltip:tt()}}});}
-  st25C=mk('st25',sP,st25C);
-  st26C=mk('st26',sL,st26C);
-  const allSch=[...new Set([...(getRecentData(prev).schools||[]).map(s=>s.name),...(getRecentData(latest).schools||[]).map(s=>s.name)])];
-  const intlP=(getRecentData(prev).agencyType?.IG||0)+(getRecentData(prev).agencyType?.ING||0);
-  const intlL=(getRecentData(latest).agencyType?.IG||0)+(getRecentData(latest).agencyType?.ING||0);
-  document.getElementById('ms-grid').innerHTML=`
-    <div class="ms-cell"><div class="ms-val">${intlP}</div><div class="ms-lbl">International<br>${prev||'—'}</div></div>
-    <div class="ms-cell"><div class="ms-val">${intlL}</div><div class="ms-lbl">International<br>${latest||'—'}</div></div>
-    <div class="ms-cell" style="grid-column:1/-1"><div class="ms-val">${allSch.length}</div><div class="ms-lbl">Schools Active Across Both Years</div></div>`;
-}
-
-// ── TABLE ─────────────────────────────────────────────────────
-let TBL_EXPORT = null; // holds the currently rendered rows/columns for Export
-
-async function renderTable(){
-  const yr=document.getElementById('tbl-yr').value;
-  const q=(document.getElementById('tbl-q').value||'').toLowerCase().trim();
-  const deptSel=document.getElementById('tbl-dept');
-  const card=document.getElementById('tbl-card');
-  const isR=(D.recentYears||[]).includes(yr);
-
-  if(!tblCache[yr]){
-    card.innerHTML='<div class="cb"><div class="tbl-empty">Fetching '+yr+' data…</div></div>';
-    try{
-const r=await fetch(API+'?action=table&year='+encodeURIComponent(yr)+'&t='+Date.now(), {cache:'no-store'});      const j=await r.json();
-      if(j.error) throw new Error(j.error);
-      tblCache[yr]=j;
-    }catch(e){card.innerHTML='<div class="cb"><div class="tbl-empty">Failed: '+e.message+'</div></div>';return;}
-  }
-  const td=tblCache[yr];
-  const hdrs=td.headers||[];
-
-  // Recent sheets: fixed columns [Campus, School, Dept, Faculty, Funder, Amount, Title, Status, GrantType]
-  const COLS_R=['Campus','School','Dept','Faculty Member','Funding Organisation','Amount (INR)','Title','Status','Grant Type'];
-  const piColIdxRecent = 3;
-  const deptColIdxRecent = 2;
-  let piColIdxGeneric = -1, deptColIdxGeneric = -1;
-  if(!isR){
-    piColIdxGeneric = hdrs.findIndex(h=>/principal investigator|faculty member/i.test(String(h||'')));
-    deptColIdxGeneric = hdrs.findIndex(h=>/^department$/i.test(String(h||'')));
-  }
-  const piColIdx = isR ? piColIdxRecent : piColIdxGeneric;
-  const deptColIdx = isR ? deptColIdxRecent : deptColIdxGeneric;
-
-  // Populate the Department dropdown from this year's full row set, preserving
-  // the current selection where possible rather than resetting it every render.
-  const prevDept = deptSel.value;
-  if(deptColIdx>=0){
-    const depts=[...new Set((td.rows||[]).map(r=>String(Array.isArray(r)?r[deptColIdx]:'').trim()).filter(Boolean))].sort();
-    deptSel.innerHTML = '<option value="">All Departments</option>'+depts.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
-    deptSel.value = depts.includes(prevDept) ? prevDept : '';
-    deptSel.disabled = false;
-  } else {
-    deptSel.innerHTML = '<option value="">Not available</option>';
-    deptSel.value=''; deptSel.disabled = true;
-  }
-  const deptVal = deptSel.value;
-
-  let rows=td.rows||[];
-  if(deptVal && deptColIdx>=0) rows=rows.filter(r=>String(Array.isArray(r)?r[deptColIdx]:'').trim()===deptVal);
-  if(q) rows=rows.filter(r=>(Array.isArray(r)?r:[]).join(' ').toLowerCase().includes(q));
-  document.getElementById('tbl-n').textContent=rows.length;
-
-  TBL_EXPORT = {rows, hdrs, isR, piColIdx, cols: isR?COLS_R:hdrs.filter(h=>h)};
-
-  if(!rows.length){card.innerHTML='<div class="cb"><div class="tbl-empty">No records match.</div></div>';return;}
-
-  let html='<div class="tw"><table class="dt"><thead><tr>';
-  if(isR){ COLS_R.forEach(h=>{html+=`<th>${h}</th>`;}); html+='<th>Publications (PI)</th>'; }
-  else   { hdrs.filter(h=>h).forEach(h=>{html+=`<th>${h}</th>`;}); if(piColIdxGeneric>=0) html+='<th>Publications (PI)</th>'; }
-  html+='</tr></thead><tbody>';
-
-  rows.forEach(r=>{
-    html+='<tr>';
-    if(isR){
-      r.forEach((v,col)=>{
-        if(col===7){// Status
-          const s=v||'Ongoing';
-          html+=`<td><span class="badge ${s.toLowerCase().includes('complet')?'b-co':'b-on'}">${s}</span></td>`;
-        }else if(col===8){// Grant Type
-          const g=v||'';const cls=g.toLowerCase()==='project'?'b-pr':g.toLowerCase()==='fellowship'?'b-fe':'b-pg';
-          html+=`<td><span class="badge ${cls}">${g||'—'}</span></td>`;
-        }else if(col===5&&v){// Amount
-          const n=parseFloat(String(v).replace(/[,\s]/g,''));
-          html+=`<td>${!isNaN(n)&&n>0?'₹'+n.toLocaleString('en-IN'):v||'—'}</td>`;
-}else{
-  html+=`<td title="${v||''}">${v||'—'}</td>`;
-}
-      });
-      html += `<td>${pubCellHtml(r[piColIdxRecent])}</td>`;
-    }else{
-      hdrs.filter(h=>h).forEach((h,hi)=>{
-        const v=Array.isArray(r)?r[hi]||'':r[h]||'';
-        if(/status/i.test(h)){html+=`<td><span class="badge ${String(v).toLowerCase().includes('complet')?'b-co':'b-on'}">${v||'Ongoing'}</span></td>`;return;}
-        html+=`<td>${v||'—'}</td>`;
-      });
-      if(piColIdxGeneric>=0) html += `<td>${pubCellHtml(Array.isArray(r)?r[piColIdxGeneric]:'')}</td>`;
-    }
-    html+='</tr>';
-  });
-  html+='</tbody></table></div>';
-  card.innerHTML='<div class="cb" style="padding:0">'+html+'</div>';
-}
-
-function clearTableFilters(){
-  document.getElementById('tbl-dept').value='';
-  document.getElementById('tbl-q').value='';
-  renderTable();
-}
-
-// Plain-text version of the Publications match, for Excel export (no HTML).
 function pubExportText(piRaw){
   if(!piRaw) return '';
   const names = splitNames(piRaw);
@@ -949,28 +427,299 @@ function pubExportText(piRaw){
   return parts.join('; ');
 }
 
-function exportTable(){
-  if(!TBL_EXPORT || !TBL_EXPORT.rows.length){ return; }
-  const {rows, isR, piColIdx, cols} = TBL_EXPORT;
-  const outRows = rows.map(r=>{
-    const obj={};
-    if(isR){
-      cols.forEach((c,i)=>{ obj[c]=r[i]||''; });
-    }else{
-      cols.forEach((c,i)=>{ obj[c]=Array.isArray(r)?(r[i]||''):(r[c]||''); });
-    }
-    obj['Publications (PI)'] = piColIdx>=0 ? pubExportText(Array.isArray(r)?r[piColIdx]:'') : '';
-    return obj;
-  });
-  const yr = document.getElementById('tbl-yr').value;
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(outRows);
-  ws['!cols'] = cols.map(()=>({wch:22})).concat([{wch:45}]);
-  XLSX.utils.book_append_sheet(wb, ws, (yr||'Projects').slice(0,31));
-  XLSX.writeFile(wb, 'ExternalProjects_'+(yr||'all')+'_'+new Date().toISOString().slice(0,10)+'.xlsx');
+// ── LOAD ──────────────────────────────────────────────────────
+function loadData() {
+  const ov=document.getElementById('ov'), errEl=document.getElementById('err');
+  errEl.style.display='none';
+  ov.classList.remove('gone');
+  document.getElementById('yearTabs').innerHTML = '';
+
+  fetch(APPS_SCRIPT_URL + '?action=all&t='+Date.now(), {cache:'no-store'})
+    .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+    .then(data => {
+      if (data.error) throw new Error('Apps Script error: ' + data.error);
+      ALL   = data.projects || [];
+      YEARS = [...new Set(ALL.map(p => p.year).filter(Boolean))].sort((a,b) => b-a);
+      return fetch(PUB_API + '?action=all&t='+Date.now(), {cache:'no-store'})
+        .then(r => r.json())
+        .then(pj => { if(!pj.error){ PUB_FACULTY = pj.faculty||[]; buildPubIndex(); } })
+        .catch(pe => console.warn('Publications fetch failed (non-fatal):', pe));
+    })
+    .then(() => {
+      buildYearTabs();
+      renderKPIs(ALL);
+      renderInsights(ALL);
+      buildCharts();
+      ACTIVE_YEAR = null;
+      setActiveYear(null);
+      document.getElementById('h-yr-range').textContent = YEARS.length ? YEARS[YEARS.length-1]+'–'+YEARS[0] : '—';
+      document.getElementById('ft-range').textContent = YEARS.length ? YEARS[YEARS.length-1]+'–'+YEARS[0] : '—';
+      document.getElementById('lastSync').textContent = 'Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      ov.classList.add('gone');
+    })
+    .catch(err => {
+      ov.classList.add('gone');
+      errEl.style.display='flex';
+      document.getElementById('err-msg').textContent = 'Error: '+err.message;
+    });
 }
 
-load(false);
+// ── YEAR TABS ──
+function buildYearTabs() {
+  const wrap = document.getElementById('yearTabs');
+  const allBtn = document.createElement('button');
+  allBtn.className = 'year-tab year-tab-all';
+  allBtn.textContent = 'All Years';
+  allBtn.onclick = () => setActiveYear(null);
+  allBtn.id = 'tab-all';
+  wrap.appendChild(allBtn);
+  YEARS.forEach(y => {
+    const btn = document.createElement('button');
+    btn.className = 'year-tab';
+    btn.textContent = y;
+    btn.id = 'tab-' + y;
+    btn.onclick = () => setActiveYear(y);
+    wrap.appendChild(btn);
+  });
+}
+function setActiveYear(year) {
+  ACTIVE_YEAR = year;
+  const allTab = document.getElementById('tab-all');
+  if (allTab) allTab.classList.toggle('active', year === null);
+  YEARS.forEach(y => {
+    const el = document.getElementById('tab-' + y);
+    if (el) el.classList.toggle('active', y === year);
+  });
+  FILTERED = ALL.filter(p => ACTIVE_YEAR===null || p.year===ACTIVE_YEAR);
+  renderKPIs(FILTERED);
+  renderInsights(FILTERED);
+  updateCharts(FILTERED);
+  renderTable();
+}
+
+// ── KPIs ──────────────────────────────────────────────────────
+function renderKPIs(data){
+  const fund  = data.reduce((s,p) => s+(p.fund||0), 0);
+  const depts = new Set(data.map(p=>p.dept).filter(d=>d&&d.trim()!==''));
+  const pis   = new Set(data.map(p=>p.pi).filter(pi=>pi&&pi.trim()!==''));
+  const yrs   = [...new Set(data.map(p=>p.year).filter(Boolean))].sort();
+  let matched=0, totalPI=0;
+  const seen=new Set();
+  data.forEach(p=>{
+    const n=normName(p.pi);
+    if(!n||seen.has(n)) return; seen.add(n); totalPI++;
+    if(matchPub(p.pi)) matched++;
+  });
+  const matchPct = totalPI? Math.round(matched/totalPI*100) : 0;
+
+  const items=[
+    {v:data.length.toLocaleString('en-IN'), l:'Total Projects', s:'Seed Money + MRP'},
+    {v:fmtINR(fund), l:'Total Funding', s:'Sanctioned amount'},
+    {v:depts.size, l:'Departments', s:'Unique departments'},
+    {v:pis.size, l:'Investigators', s:'Unique PIs'},
+    {v:yrs.length, l:'Years Covered', s:yrs.length?yrs[0]+'–'+yrs[yrs.length-1]:'—'},
+    {v:matchPct+'%', l:'PI Publication Match', s:matched+' of '+totalPI+' PIs'},
+  ];
+  document.getElementById('h-kpis').innerHTML = items.map(m=>
+    `<div class="kpi"><div class="kpi-val">${m.v}</div><div class="kpi-lbl">${m.l}</div><div class="kpi-sub">${m.s}</div></div>`
+  ).join('');
+}
+
+function renderInsights(data){
+  const piFund = {};
+  data.forEach(p=>{ const k=(p.pi||'').trim(); if(!k) return; piFund[k]=(piFund[k]||0)+(p.fund||0); });
+  const topPI = Object.entries(piFund).sort((a,b)=>b[1]-a[1])[0];
+  const deptCount = {};
+  data.forEach(p=>{ const k=(p.dept||'').trim(); if(!k) return; deptCount[k]=(deptCount[k]||0)+1; });
+  const topDept = Object.entries(deptCount).sort((a,b)=>b[1]-a[1])[0];
+  const latestYr = YEARS[0], prevYr = YEARS[1];
+  const latestFund = ALL.filter(p=>p.year===latestYr).reduce((s,p)=>s+(p.fund||0),0);
+  const prevFund = ALL.filter(p=>p.year===prevYr).reduce((s,p)=>s+(p.fund||0),0);
+  const growth = prevFund ? Math.round((latestFund-prevFund)/prevFund*100) : 0;
+  let matched=0, totalPI=0; const seen=new Set();
+  data.forEach(p=>{ const n=normName(p.pi); if(!n||seen.has(n)) return; seen.add(n); totalPI++; if(matchPub(p.pi)) matched++; });
+
+  const cards=[
+    {v:topPI?fmtINR(topPI[1]):'—', l:'Top Funded PI', s:topPI?topPI[0]:'—', cls:'ic-gold', ico:'ico-gold', svg:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
+    {v:topDept?topDept[1]:'—', l:'Most Active Department', s:topDept?topDept[0]:'—', cls:'ic-green', ico:'ico-green', svg:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>'},
+    {v:(growth>=0?'+':'')+growth+'%', l:'YoY Funding Growth', s:latestYr+' over '+(prevYr||'—'), cls:'ic-blue', ico:'ico-blue', svg:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'},
+    {v:matched+' / '+totalPI, l:'PIs With Publication Record', s:'Matched to Publications roster', cls:'ic-teal', ico:'ico-teal', svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'},
+  ];
+  document.getElementById('ig-grid').innerHTML = cards.map(c=>
+    `<div class="ic ${c.cls}"><div class="ic-icon ${c.ico}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.svg}</svg></div><div class="ic-val">${c.v}</div><div class="ic-label">${c.l}</div><div class="ic-sub">${esc(c.s)}</div></div>`
+  ).join('');
+}
+
+// ── CHARTS ────────────────────────────────────────────────────
+function buildCharts() {
+  Object.keys(CHARTS).forEach(k => { CHARTS[k].destroy(); delete CHARTS[k]; });
+  const years = [...new Set(ALL.map(p => p.year).filter(Boolean))].sort();
+
+  CHARTS.fy = new Chart(document.getElementById('cFundYear'), {
+    type: 'bar',
+    data: { labels: years.map(String), datasets: [{
+      label: 'Funding (₹ Lakhs)',
+      data: years.map(y => ALL.filter(p=>p.year===y).reduce((s,p)=>s+(p.fund||0),0)/1e5),
+      backgroundColor: years.map((_,i)=> i>=years.length-2 ? C.gold2 : 'rgba(26,34,54,.7)'),
+      borderRadius: 5, borderSkipped:false
+    }]},
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{...tt(), callbacks:{label:c=>'₹ '+c.parsed.y.toFixed(2)+' Lakhs'}} },
+      scales:{ x:{grid:{display:false},ticks:{font:{size:10}}}, y:{grid:{color:'rgba(8,13,26,.05)'},ticks:{font:{size:10},callback:v=>'₹'+v.toFixed(0)+'L'}} } }
+  });
+
+  CHARTS.py = new Chart(document.getElementById('cProjYear'), {
+    type: 'line',
+    data: { labels: years.map(String), datasets: [{
+      label: 'Projects', data: years.map(y => ALL.filter(p=>p.year===y).length),
+      borderColor: C.gold, backgroundColor:'rgba(184,129,31,.08)',
+      borderWidth:2, pointBackgroundColor:C.gold, pointBorderColor:'#fff', pointBorderWidth:2, pointRadius:4.5, tension:.35, fill:true
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{...tt(), callbacks:{label:c=>c.parsed.y+' projects'}} },
+      scales:{ x:{grid:{display:false},ticks:{font:{size:10}}}, y:{grid:{color:'rgba(8,13,26,.05)'},ticks:{font:{size:10}}} } }
+  });
+
+  const dcData = topN(countBy(ALL,'dept',true), 10);
+  CHARTS.dc = new Chart(document.getElementById('cDeptCount'), {
+    type:'bar',
+    data:{ labels:dcData.map(([d])=>d), datasets:[{ label:'Projects', data:dcData.map(([,v])=>v),
+      backgroundColor:C.palette.map(c=>c+'cc'), borderColor:C.palette, borderWidth:1.5, borderRadius:4 }] },
+    options: hbarOpts({suffix:''})
+  });
+
+  const dfData = topN(sumBy(ALL,'dept','fund',true), 10);
+  CHARTS.df = new Chart(document.getElementById('cDeptFund'), {
+    type:'bar',
+    data:{ labels:dfData.map(([d])=>d), datasets:[{ label:'Funding', data:dfData.map(([,v])=>v/1e5),
+      backgroundColor:[...C.palette].reverse().map(c=>c+'cc'), borderColor:[...C.palette].reverse(), borderWidth:1.5, borderRadius:4 }] },
+    options: hbarOpts({suffix:'L'})
+  });
+
+  const piData = topN(sumBy(ALL,'pi','fund',true), 15);
+  CHARTS.pi = new Chart(document.getElementById('cPI'), {
+    type:'bar',
+    data:{ labels:piData.map(([n])=>n), datasets:[{ label:'Funding', data:piData.map(([,v])=>v/1e5),
+      backgroundColor:C.ink+'99', borderColor:C.ink, borderWidth:1.5, borderRadius:4 }] },
+    options: hbarOpts({suffix:'L'})
+  });
+}
+
+function updateCharts(data){
+  const years = [...new Set(data.map(p => p.year).filter(Boolean))].sort();
+  CHARTS.fy.data.labels = years.map(String);
+  CHARTS.fy.data.datasets[0].data = years.map(y=>data.filter(p=>p.year===y).reduce((s,p)=>s+(p.fund||0),0)/1e5);
+  CHARTS.fy.update();
+  CHARTS.py.data.labels = years.map(String);
+  CHARTS.py.data.datasets[0].data = years.map(y=>data.filter(p=>p.year===y).length);
+  CHARTS.py.update();
+  const dcData = topN(countBy(data,'dept',true), 10);
+  CHARTS.dc.data.labels = dcData.map(([d])=>d); CHARTS.dc.data.datasets[0].data = dcData.map(([,v])=>v); CHARTS.dc.update();
+  const dfData = topN(sumBy(data,'dept','fund',true), 10);
+  CHARTS.df.data.labels = dfData.map(([d])=>d); CHARTS.df.data.datasets[0].data = dfData.map(([,v])=>v/1e5); CHARTS.df.update();
+  const piData = topN(sumBy(data,'pi','fund',true), 15);
+  CHARTS.pi.data.labels = piData.map(([n])=>n); CHARTS.pi.data.datasets[0].data = piData.map(([,v])=>v/1e5); CHARTS.pi.update();
+}
+
+function hbarOpts({suffix}){
+  return { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{...tt(), callbacks:{label:c=>suffix?'₹ '+c.parsed.x.toFixed(2)+' L':c.parsed.x+' projects'}} },
+    scales:{
+      x:{grid:{color:'rgba(8,13,26,.05)'},border:{display:false},ticks:{font:{size:10},callback:v=>suffix?v.toFixed(0)+suffix:v}},
+      y:{grid:{display:false},border:{display:false},ticks:{font:{size:10.5},crossAlign:'far',callback:function(val){
+        const label=this.getLabelForValue(val);
+        if(label.length<=28) return label;
+        const words=label.split(' '); const lines=[]; let line='';
+        for(const w of words){ if((line+w).length>28){lines.push(line.trim());line='';} line+=w+' '; }
+        if(line.trim()) lines.push(line.trim());
+        return lines;
+      }}}
+    },
+    layout:{padding:{left:0,right:8,top:0,bottom:0}}
+  };
+}
+function countBy(arr,key,skipEmpty){
+  return arr.reduce((acc,p)=>{ const k=(p[key]||'').trim(); if(skipEmpty&&!k) return acc; const l=k||'Unknown'; acc[l]=(acc[l]||0)+1; return acc; },{});
+}
+function sumBy(arr,gk,sk,skipEmpty){
+  return arr.reduce((acc,p)=>{ const k=(p[gk]||'').trim(); if(skipEmpty&&!k) return acc; const l=k||'Unknown'; acc[l]=(acc[l]||0)+(p[sk]||0); return acc; },{});
+}
+function topN(obj,n){ return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n); }
+
+// ── TABLE (structure matches the External Projects dashboard exactly) ──
+function renderTable(){
+  const q=(document.getElementById('tbl-q').value||'').toLowerCase().trim();
+  const deptSel=document.getElementById('tbl-dept');
+  const card=document.getElementById('tbl-card');
+
+  const base = ACTIVE_YEAR===null ? ALL : ALL.filter(p=>p.year===ACTIVE_YEAR);
+  const prevDept = deptSel.value;
+  const depts=[...new Set(base.map(p=>(p.dept||'').trim()).filter(Boolean))].sort();
+  deptSel.innerHTML = '<option value="">All Departments</option>'+depts.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  deptSel.value = depts.includes(prevDept) ? prevDept : '';
+  const deptVal = deptSel.value;
+
+  let rows = base;
+  if(deptVal) rows = rows.filter(p=>(p.dept||'').trim()===deptVal);
+  if(q){
+    rows = rows.filter(p=>[p.pi,p.title,p.approvalNo,p.dept,p.coPi].join(' ').toLowerCase().includes(q));
+  }
+  document.getElementById('tbl-n').textContent = rows.length;
+  TBL_EXPORT = rows;
+
+  if(!rows.length){ card.innerHTML = '<div class="cb"><div class="tbl-empty">No records match.</div></div>'; return; }
+
+  let html = '<div class="tw"><table class="dt"><thead><tr>'
+    + '<th>Year</th><th>Sl No</th><th>Principal Investigator</th><th>Co Investigator</th><th>Department</th>'
+    + '<th>Approval No</th><th>Project Title</th><th>Fund (INR)</th><th>Start Date</th><th>End Date</th>'
+    + '<th>Extension</th><th>Publications (PI)</th></tr></thead><tbody>';
+
+  rows.forEach(p=>{
+    html += '<tr>'
+      + '<td>'+esc(p.year)+'</td>'
+      + '<td>'+esc(p.slNo)+'</td>'
+      + '<td>'+esc(p.pi||'—')+'</td>'
+      + '<td>'+esc(p.coPi||'—')+'</td>'
+      + '<td>'+esc(p.dept||'—')+'</td>'
+      + '<td>'+esc(p.approvalNo||'—')+'</td>'
+      + '<td class="td-title" title="'+esc(p.title)+'">'+esc(p.title||'—')+'</td>'
+      + '<td>'+(p.fund?fmtINR(p.fund):'—')+'</td>'
+      + '<td>'+esc(p.startDate||'—')+'</td>'
+      + '<td>'+esc(p.endDate||'—')+'</td>'
+      + '<td>'+esc(p.extension||'—')+'</td>'
+      + '<td>'+pubCellHtml(p.pi)+'</td>'
+      + '</tr>';
+  });
+  html += '</tbody></table></div>';
+  card.innerHTML = '<div class="cb" style="padding:0">'+html+'</div>';
+}
+
+function clearTableFilters(){
+  document.getElementById('tbl-dept').value='';
+  document.getElementById('tbl-q').value='';
+  renderTable();
+}
+
+function exportTable(){
+  const data = TBL_EXPORT && TBL_EXPORT.length ? TBL_EXPORT : ALL;
+  if (!data.length) { return; }
+  const wb = XLSX.utils.book_new();
+  const rows = data.map(p => ({
+    'Year': p.year, 'Sl No': p.slNo,
+    'Principal Investigator': p.pi, 'Co Investigator': p.coPi,
+    'Department': p.dept, 'Project Approval No': p.approvalNo,
+    'Project Title': p.title, 'Fund Approved (INR)': p.fund||0,
+    'Start Date': p.startDate, 'End Date': p.endDate,
+    'Extension': p.extension,
+    'Publications (PI)': pubExportText(p.pi)
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [8,8,28,28,24,20,60,18,16,16,20,40].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws, 'Seed Money Projects');
+  XLSX.writeFile(wb, 'SeedMoney_CRP_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+
+loadData();
 </script>
 </body>
 </html>
