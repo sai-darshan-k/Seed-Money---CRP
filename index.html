@@ -123,6 +123,24 @@ main{max-width:1560px;margin:0 auto;padding:36px 52px 90px}
 /* ── LAYOUT GRIDS ── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:18px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}
+.g6040{display:grid;grid-template-columns:1.65fr 1fr;gap:15px;margin-bottom:18px}
+
+/* ── SDG ── */
+.sdg-rows{display:flex;flex-direction:column;gap:6px}
+.sdg-row{display:flex;align-items:center;gap:9px;padding:3px 7px;border-radius:6px;transition:background .12s;cursor:default}
+.sdg-row:hover{background:var(--gold-pale)}
+.sdg-num{font-family:var(--f-mono);font-size:9.5px;font-weight:600;color:#fff;width:26px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sdg-nm{font-size:11px;color:var(--ink);font-weight:500;width:210px;flex-shrink:0;line-height:1.3}
+.sdg-track{flex:1;height:12px;background:rgba(8,13,26,.04);border-radius:3px;overflow:hidden}
+.sdg-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.sdg-count{font-family:var(--f-mono);font-size:10.5px;font-weight:600;color:var(--ink3);width:30px;text-align:right;flex-shrink:0}
+.sdg-empty{color:var(--ink4);font-size:12px;padding:24px 0;text-align:center}
+.sdg-cell{display:flex;flex-wrap:wrap;gap:3px}
+.sdg-tag{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;padding:0 5px;border-radius:4px;font-family:var(--f-mono);font-size:9.5px;font-weight:600;color:#fff}
+.ms-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ms-cell{padding:11px 12px;border-radius:9px;background:rgba(8,13,26,.025);border:1px solid var(--border);text-align:center}
+.ms-val{font-family:var(--f-display);font-size:21px;font-weight:600;color:var(--ink);line-height:1}
+.ms-lbl{font-size:9px;color:var(--ink4);margin-top:3px;font-weight:500;line-height:1.4}
 
 /* ── YEAR TABS (kept, restyled to match gold theme) ── */
 .year-tabs-wrap{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
@@ -169,13 +187,14 @@ footer{background:var(--ink);color:rgba(255,255,255,.22);text-align:center;paddi
 footer strong{color:var(--gold2)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media(max-width:1200px){
-  .ig-grid,.g2,.g3{grid-template-columns:1fr}
+  .ig-grid,.g2,.g3,.g6040{grid-template-columns:1fr}
   .h-kpis{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:740px){
   .h-kpis{grid-template-columns:repeat(2,1fr)}
   .h-wrap{padding-left:20px;padding-right:20px}
   main{padding:24px 20px 64px}
+  .sdg-nm{width:120px}
 }
 </style>
 </head>
@@ -267,6 +286,21 @@ footer strong{color:var(--gold2)}
     </div>
   </div>
 
+  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Sustainable Development Goal Alignment</span><span class="sec-rule"></span></div>
+  <div class="g6040">
+    <div class="card">
+      <div class="ch"><span class="ct">Projects by SDG</span><span class="chip" id="sdg-scope">All Years</span></div>
+      <div class="cb"><div class="sdg-rows" id="sdg-rows"></div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">Top Goals</span><span class="chip" id="sdg-chip">—</span></div>
+      <div class="cb">
+        <div class="cw" style="height:210px"><canvas id="sdgDonut"></canvas></div>
+        <div class="ms-grid" id="sdg-ms" style="margin-top:14px"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="sec"><span class="sec-accent"></span><span class="sec-title">Filter by Year</span><span class="sec-rule"></span></div>
   <div class="year-tabs-wrap" id="yearTabs"></div>
 
@@ -275,6 +309,8 @@ footer strong{color:var(--gold2)}
   <div class="tbl-bar">
     <span class="tbl-lbl">Dept</span>
     <select id="tbl-dept" class="tbl-sel" onchange="renderTable()"><option value="">All Departments</option></select>
+    <span class="tbl-lbl">SDG</span>
+    <select id="tbl-sdg" class="tbl-sel" onchange="renderTable()"><option value="">All SDGs</option></select>
     <input class="tbl-search" id="tbl-q" placeholder="Search PI, title, approval number…" oninput="renderTable()">
     <button class="btn-ghost-clear" onclick="clearTableFilters()">Clear</button>
     <div class="tbl-count"><b id="tbl-n">—</b> records</div>
@@ -317,6 +353,42 @@ const C = {
   red:'#8B1A1A',teal:'#0F766E',orange:'#92400E',purple:'#4C1D95',purple2:'#7C3AED',slate:'#94A3B8',
   palette:['#080D1A','#B8811F','#145C38','#1B3A6B','#92400E','#4C1D95','#0F766E','#7C3AED','#374159','#1971c2','#be185d','#0369a1']
 };
+
+// ── SDG REFERENCE ──────────────────────────────────────────────
+// Official UN goal names and goal colours.
+const SDG_NAMES = {
+  1:'No Poverty', 2:'Zero Hunger', 3:'Good Health and Well-being', 4:'Quality Education',
+  5:'Gender Equality', 6:'Clean Water and Sanitation', 7:'Affordable and Clean Energy',
+  8:'Decent Work and Economic Growth', 9:'Industry, Innovation and Infrastructure',
+  10:'Reduced Inequalities', 11:'Sustainable Cities and Communities',
+  12:'Responsible Consumption and Production', 13:'Climate Action', 14:'Life Below Water',
+  15:'Life on Land', 16:'Peace, Justice and Strong Institutions', 17:'Partnerships for the Goals'
+};
+const SDG_COLORS = {
+  1:'#E5243B', 2:'#DDA63A', 3:'#4C9F38', 4:'#C5192D', 5:'#FF3A21', 6:'#26BDE2',
+  7:'#FCC30B', 8:'#A21942', 9:'#FD6925', 10:'#DD1367', 11:'#FD9D24', 12:'#BF8B2E',
+  13:'#3F7E44', 14:'#0A97D9', 15:'#56C02B', 16:'#00689D', 17:'#19486A'
+};
+// Accepts either the array the Apps Script sends, or a raw cell string.
+function sdgList(p){
+  if (Array.isArray(p && p.sdg) && p.sdg.length) return p.sdg;
+  const s = String((p && (p.sdgRaw || p.sdg)) || '').trim();
+  if(!s || s==='-' || /^n\/?a$/i.test(s)) return [];
+  const out=[];
+  (s.match(/\d{1,2}/g)||[]).forEach(x=>{
+    const n=parseInt(x,10);
+    if(n>=1 && n<=17 && out.indexOf(n)===-1) out.push(n);
+  });
+  return out;
+}
+function sdgCellHtml(p){
+  const g = sdgList(p);
+  if(!g.length) return '<span class="pub-none">—</span>';
+  return '<div class="sdg-cell">' + g.map(n =>
+    `<span class="sdg-tag" style="background:${SDG_COLORS[n]}" title="SDG ${n}: ${SDG_NAMES[n]}">${n}</span>`
+  ).join('') + '</div>';
+}
+
 Chart.defaults.font.family = "'DM Sans',sans-serif";
 Chart.defaults.color = '#374159';
 function tt(){return{backgroundColor:'#fff',titleColor:C.ink,bodyColor:C.ink3,borderColor:'rgba(8,13,26,.1)',borderWidth:1,padding:11,cornerRadius:8,boxPadding:4,titleFont:{family:"'Cormorant Garamond',serif",size:13,weight:600},bodyFont:{family:"'DM Sans',sans-serif",size:11}}}
@@ -332,6 +404,7 @@ let ACTIVE_YEAR = null;
 let CHARTS   = {};
 let YEARS    = [];
 let TBL_EXPORT = null;
+let sdgC = null;
 
 // ══════════════════════════════════════════════════════════════
 // PUBLICATIONS MATCHING — PI-only, matched against the Publications
@@ -447,6 +520,7 @@ function loadData() {
     })
     .then(() => {
       buildYearTabs();
+      buildSdgFilter();
       renderKPIs(ALL);
       renderInsights(ALL);
       buildCharts();
@@ -482,6 +556,11 @@ function buildYearTabs() {
     wrap.appendChild(btn);
   });
 }
+function buildSdgFilter(){
+  const sel = document.getElementById('tbl-sdg');
+  sel.innerHTML = '<option value="">All SDGs</option>' +
+    Object.keys(SDG_NAMES).map(n => `<option value="${n}">SDG ${n} · ${SDG_NAMES[n]}</option>`).join('');
+}
 function setActiveYear(year) {
   ACTIVE_YEAR = year;
   const allTab = document.getElementById('tab-all');
@@ -494,6 +573,7 @@ function setActiveYear(year) {
   renderKPIs(FILTERED);
   renderInsights(FILTERED);
   updateCharts(FILTERED);
+  renderSDG(FILTERED);
   renderTable();
 }
 
@@ -536,18 +616,74 @@ function renderInsights(data){
   const latestFund = ALL.filter(p=>p.year===latestYr).reduce((s,p)=>s+(p.fund||0),0);
   const prevFund = ALL.filter(p=>p.year===prevYr).reduce((s,p)=>s+(p.fund||0),0);
   const growth = prevFund ? Math.round((latestFund-prevFund)/prevFund*100) : 0;
-  let matched=0, totalPI=0; const seen=new Set();
-  data.forEach(p=>{ const n=normName(p.pi); if(!n||seen.has(n)) return; seen.add(n); totalPI++; if(matchPub(p.pi)) matched++; });
+  const goals = new Set();
+  let tagged = 0;
+  data.forEach(p=>{ const g=sdgList(p); if(g.length){ tagged++; g.forEach(n=>goals.add(n)); } });
 
   const cards=[
     {v:topPI?fmtINR(topPI[1]):'—', l:'Top Funded PI', s:topPI?topPI[0]:'—', cls:'ic-gold', ico:'ico-gold', svg:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
     {v:topDept?topDept[1]:'—', l:'Most Active Department', s:topDept?topDept[0]:'—', cls:'ic-green', ico:'ico-green', svg:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>'},
     {v:(growth>=0?'+':'')+growth+'%', l:'YoY Funding Growth', s:latestYr+' over '+(prevYr||'—'), cls:'ic-blue', ico:'ico-blue', svg:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'},
-    {v:matched+' / '+totalPI, l:'PIs With Publication Record', s:'Matched to Publications roster', cls:'ic-teal', ico:'ico-teal', svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'},
+    {v:tagged+' / '+data.length, l:'Projects Mapped to SDGs', s:goals.size+' of 17 goals represented', cls:'ic-teal', ico:'ico-teal', svg:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'},
   ];
   document.getElementById('ig-grid').innerHTML = cards.map(c=>
     `<div class="ic ${c.cls}"><div class="ic-icon ${c.ico}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.svg}</svg></div><div class="ic-val">${c.v}</div><div class="ic-label">${c.l}</div><div class="ic-sub">${esc(c.s)}</div></div>`
   ).join('');
+}
+
+// ── SDG ───────────────────────────────────────────────────────
+// A project carrying several goals is counted under each of them,
+// so the bars can add up to more than the number of projects.
+function renderSDG(data){
+  const counts = {};
+  let tagged = 0;
+  data.forEach(p=>{
+    const g = sdgList(p);
+    if(!g.length) return;
+    tagged++;
+    g.forEach(n=>{ counts[n]=(counts[n]||0)+1; });
+  });
+  const rowsEl = document.getElementById('sdg-rows');
+  const goals = Object.keys(counts).map(Number).sort((a,b)=>counts[b]-counts[a]);
+  document.getElementById('sdg-scope').textContent = ACTIVE_YEAR===null ? 'All Years' : String(ACTIVE_YEAR);
+
+  if(!goals.length){
+    rowsEl.innerHTML = '<div class="sdg-empty">No SDG column found in the register.<br>Add a column headed <b>SDG</b> with goal numbers, then Refresh.</div>';
+    document.getElementById('sdg-chip').textContent='—';
+    document.getElementById('sdg-ms').innerHTML='';
+    dc(sdgC); sdgC=null;
+    return;
+  }
+
+  const mx = counts[goals[0]] || 1;
+  rowsEl.innerHTML = goals.map(n=>{
+    const pct = Math.round(counts[n]/mx*100);
+    return `<div class="sdg-row" title="SDG ${n}: ${SDG_NAMES[n]}">
+      <span class="sdg-num" style="background:${SDG_COLORS[n]}">${n}</span>
+      <span class="sdg-nm">${SDG_NAMES[n]}</span>
+      <div class="sdg-track"><div class="sdg-fill" style="width:${pct}%;background:${SDG_COLORS[n]}"></div></div>
+      <span class="sdg-count">${counts[n]}</span></div>`;
+  }).join('');
+
+  document.getElementById('sdg-chip').textContent = goals.length+' Goals Covered';
+
+  const top = goals.slice(0,6);
+  dc(sdgC);
+  sdgC = new Chart(document.getElementById('sdgDonut'), {
+    type:'doughnut',
+    data:{ labels: top.map(n=>'SDG '+n),
+           datasets:[{ data: top.map(n=>counts[n]),
+                       backgroundColor: top.map(n=>SDG_COLORS[n]),
+                       borderWidth:0, hoverOffset:5 }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{ legend:{position:'bottom',labels:{font:{size:10.5},padding:8,usePointStyle:true}},
+        tooltip:{...tt(), callbacks:{ label:c=>` ${SDG_NAMES[top[c.dataIndex]]}: ${c.parsed}` }} } }
+  });
+
+  const cover = data.length ? Math.round(tagged/data.length*100) : 0;
+  document.getElementById('sdg-ms').innerHTML = `
+    <div class="ms-cell"><div class="ms-val">${tagged}</div><div class="ms-lbl">Projects Tagged<br>${ACTIVE_YEAR===null?'All years':ACTIVE_YEAR}</div></div>
+    <div class="ms-cell"><div class="ms-val">${cover}%</div><div class="ms-lbl">Register Coverage<br>of ${data.length} projects</div></div>`;
 }
 
 // ── CHARTS ────────────────────────────────────────────────────
@@ -650,6 +786,7 @@ function topN(obj,n){ return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,
 function renderTable(){
   const q=(document.getElementById('tbl-q').value||'').toLowerCase().trim();
   const deptSel=document.getElementById('tbl-dept');
+  const sdgVal=document.getElementById('tbl-sdg').value;
   const card=document.getElementById('tbl-card');
 
   const base = ACTIVE_YEAR===null ? ALL : ALL.filter(p=>p.year===ACTIVE_YEAR);
@@ -661,6 +798,7 @@ function renderTable(){
 
   let rows = base;
   if(deptVal) rows = rows.filter(p=>(p.dept||'').trim()===deptVal);
+  if(sdgVal) rows = rows.filter(p=>sdgList(p).indexOf(parseInt(sdgVal,10))!==-1);
   if(q){
     rows = rows.filter(p=>[p.pi,p.title,p.approvalNo,p.dept,p.coPi].join(' ').toLowerCase().includes(q));
   }
@@ -672,7 +810,7 @@ function renderTable(){
   let html = '<div class="tw"><table class="dt"><thead><tr>'
     + '<th>Year</th><th>Sl No</th><th>Principal Investigator</th><th>Co Investigator</th><th>Department</th>'
     + '<th>Approval No</th><th>Project Title</th><th>Fund (INR)</th><th>Start Date</th><th>End Date</th>'
-    + '<th>Extension</th><th>Publications (PI)</th></tr></thead><tbody>';
+    + '<th>Extension</th><th>SDG</th><th>Publications (PI)</th></tr></thead><tbody>';
 
   rows.forEach(p=>{
     html += '<tr>'
@@ -687,6 +825,7 @@ function renderTable(){
       + '<td>'+esc(p.startDate||'—')+'</td>'
       + '<td>'+esc(p.endDate||'—')+'</td>'
       + '<td>'+esc(p.extension||'—')+'</td>'
+      + '<td>'+sdgCellHtml(p)+'</td>'
       + '<td>'+pubCellHtml(p.pi)+'</td>'
       + '</tr>';
   });
@@ -696,6 +835,7 @@ function renderTable(){
 
 function clearTableFilters(){
   document.getElementById('tbl-dept').value='';
+  document.getElementById('tbl-sdg').value='';
   document.getElementById('tbl-q').value='';
   renderTable();
 }
@@ -711,10 +851,11 @@ function exportTable(){
     'Project Title': p.title, 'Fund Approved (INR)': p.fund||0,
     'Start Date': p.startDate, 'End Date': p.endDate,
     'Extension': p.extension,
+    'SDG': sdgList(p).join(', '),
     'Publications (PI)': pubExportText(p.pi)
   }));
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [8,8,28,28,24,20,60,18,16,16,20,40].map(w=>({wch:w}));
+  ws['!cols'] = [8,8,28,28,24,20,60,18,16,16,20,12,40].map(w=>({wch:w}));
   XLSX.utils.book_append_sheet(wb, ws, 'Seed Money Projects');
   XLSX.writeFile(wb, 'SeedMoney_CRP_' + new Date().toISOString().slice(0,10) + '.xlsx');
 }
