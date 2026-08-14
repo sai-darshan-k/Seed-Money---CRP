@@ -125,6 +125,36 @@ main{max-width:1560px;margin:0 auto;padding:36px 52px 90px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}
 .g6040{display:grid;grid-template-columns:1.65fr 1fr;gap:15px;margin-bottom:18px}
 
+/* ── STATUS PANEL ── */
+.st-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.st-cell{padding:14px 12px;border-radius:9px;text-align:center;border:1px solid var(--border)}
+.st-cell.c-done{background:var(--blue-bg)}
+.st-cell.c-live{background:var(--green-bg)}
+.st-cell.c-none{background:rgba(8,13,26,.03)}
+.st-val{font-family:var(--f-display);font-size:27px;font-weight:700;line-height:1}
+.st-cell.c-done .st-val{color:var(--blue)}
+.st-cell.c-live .st-val{color:var(--green2)}
+.st-cell.c-none .st-val{color:var(--ink4)}
+.st-lbl{font-size:10px;color:var(--ink3);margin-top:4px;font-weight:500;line-height:1.3}
+.st-pct{font-family:var(--f-mono);font-size:9px;color:var(--ink5);margin-top:2px}
+.age-rows{display:flex;flex-direction:column;gap:7px}
+.age-row{display:flex;align-items:center;gap:9px}
+.age-nm{font-size:11px;color:var(--ink);font-weight:500;width:118px;flex-shrink:0}
+.age-track{flex:1;height:14px;background:rgba(8,13,26,.04);border-radius:3px;overflow:hidden}
+.age-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.age-count{font-family:var(--f-mono);font-size:10.5px;font-weight:600;color:var(--ink3);width:28px;text-align:right;flex-shrink:0}
+.note{font-size:10px;color:var(--ink4);line-height:1.5;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* ── STATUS-BY-YEAR LEGEND & BARS ── */
+.camp-legend{display:flex;flex-wrap:wrap;gap:7px}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ink4)}
+.leg-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.yst-row{display:flex;align-items:center;gap:8px;padding:3px 0}
+.yst-yr{font-family:var(--f-mono);font-size:10px;color:var(--ink3);width:52px;flex-shrink:0}
+.yst-bar{flex:1;height:14px;border-radius:3px;overflow:hidden;display:flex;background:rgba(8,13,26,.04)}
+.yst-seg{height:100%}
+.yst-tot{font-family:var(--f-mono);font-size:10px;color:var(--ink4);width:26px;text-align:right;flex-shrink:0}
+
 /* ── SDG ── */
 .sdg-rows{display:flex;flex-direction:column;gap:6px}
 .sdg-row{display:flex;align-items:center;gap:9px;padding:3px 7px;border-radius:6px;transition:background .12s;cursor:default}
@@ -283,6 +313,31 @@ footer strong{color:var(--gold2)}
     <div class="card">
       <div class="ch"><span class="ct">Top Principal Investigators</span><span class="chip">By Funding</span></div>
       <div class="cb"><div class="cw" style="height:320px"><canvas id="cPI"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="sec"><span class="sec-accent"></span><span class="sec-title">Portfolio Status &amp; Ageing</span><span class="sec-rule"></span></div>
+  <div class="g3">
+    <div class="card">
+      <div class="ch"><span class="ct">Completed vs Ongoing</span><span class="chip" id="st-scope">All Years</span></div>
+      <div class="cb">
+        <div class="st-grid" id="st-grid"></div>
+        <div class="cw" style="height:150px"><canvas id="stAll"></canvas></div>
+        <div class="note" id="st-note"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">How Long Ongoing Projects Have Run</span><span class="chip" id="age-chip">—</span></div>
+      <div class="cb">
+        <div class="age-rows" id="age-rows"></div>
+        <div class="note">Based on each project's recorded start and end date. Projects with no usable end date are held out as "Unknown" rather than counted either way.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ct">Status by Year</span><span class="chip">All Years</span></div>
+      <div class="cb"><div id="yst-rows"></div>
+        <div class="camp-legend" style="margin-top:12px" id="yst-legend"></div>
+      </div>
     </div>
   </div>
 
@@ -573,6 +628,7 @@ function setActiveYear(year) {
   renderKPIs(FILTERED);
   renderInsights(FILTERED);
   updateCharts(FILTERED);
+  renderPortfolio(FILTERED);
   renderSDG(FILTERED);
   renderTable();
 }
@@ -629,6 +685,95 @@ function renderInsights(data){
   document.getElementById('ig-grid').innerHTML = cards.map(c=>
     `<div class="ic ${c.cls}"><div class="ic-icon ${c.ico}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${c.svg}</svg></div><div class="ic-val">${c.v}</div><div class="ic-label">${c.l}</div><div class="ic-sub">${esc(c.s)}</div></div>`
   ).join('');
+}
+
+// ── PORTFOLIO STATUS & AGEING ─────────────────────────────────
+// Status comes from the Apps Script's projectStatus(): Completed if
+// the end date has passed, Ongoing if it's in the future, Unknown
+// if there's no end date it could parse — a large share of older
+// rows, held separately rather than folded into either count.
+let stAllC = null;
+function renderPortfolio(data){
+  document.getElementById('st-scope').textContent = ACTIVE_YEAR===null ? 'All Years' : String(ACTIVE_YEAR);
+
+  const counts = {Completed:0, Ongoing:0, Unknown:0};
+  data.forEach(p=>{ counts[p.status||'Unknown'] = (counts[p.status||'Unknown']||0)+1; });
+  const done=counts.Completed, live=counts.Ongoing, unk=counts.Unknown;
+  const tot = done+live+unk || 1;
+  const pct = n => Math.round(n/tot*100);
+
+  document.getElementById('st-grid').innerHTML = `
+    <div class="st-cell c-done"><div class="st-val">${done}</div><div class="st-lbl">Completed</div><div class="st-pct">${pct(done)}%</div></div>
+    <div class="st-cell c-live"><div class="st-val">${live}</div><div class="st-lbl">Ongoing</div><div class="st-pct">${pct(live)}%</div></div>
+    <div class="st-cell c-none"><div class="st-val">${unk}</div><div class="st-lbl">Unknown</div><div class="st-pct">${pct(unk)}%</div></div>`;
+
+  dc(stAllC);
+  stAllC = new Chart(document.getElementById('stAll'), {
+    type:'doughnut',
+    data:{ labels:['Completed','Ongoing','Unknown'],
+           datasets:[{ data:[done,live,unk],
+                       backgroundColor:[C.blue, C.green2, C.slate],
+                       borderWidth:0, hoverOffset:5 }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{ legend:{position:'right',labels:{font:{size:10.5},padding:8,usePointStyle:true}}, tooltip:tt() } }
+  });
+
+  document.getElementById('st-note').innerHTML = unk
+    ? `<b>${unk}</b> of ${tot} projects have no end date CRP could parse — mostly older Seed Money and MRP rows recorded before duration tracking was consistent. They're held separately rather than assumed either way.`
+    : 'Every project in this view has a usable end date.';
+
+  renderAgeing(data);
+  renderStatusByYear();
+}
+
+function renderAgeing(data){
+  const buckets = [
+    {l:'Under 1 year',    key:'Under 1 year',    col:C.green2},
+    {l:'1 to 2 years',    key:'1 to 2 years',    col:C.teal},
+    {l:'2 to 3 years',    key:'2 to 3 years',    col:C.gold},
+    {l:'3 to 5 years',    key:'3 to 5 years',    col:C.orange},
+    {l:'5 years or more', key:'5 years or more', col:C.red},
+  ];
+  buckets.forEach(b=>b.n=0);
+  let liveTotal=0;
+  data.forEach(p=>{
+    if(p.status!=='Ongoing') return;
+    liveTotal++;
+    const a=p.ageYears;
+    if(a==null) return;
+    const b = a<1?buckets[0] : a<2?buckets[1] : a<3?buckets[2] : a<5?buckets[3] : buckets[4];
+    b.n++;
+  });
+  const mx = Math.max(...buckets.map(b=>b.n), 1);
+  document.getElementById('age-chip').textContent = liveTotal + ' Ongoing';
+  document.getElementById('age-rows').innerHTML = buckets.map(b=>`
+    <div class="age-row" title="${b.n} ongoing projects">
+      <span class="age-nm">${b.l}</span>
+      <div class="age-track"><div class="age-fill" style="width:${Math.round(b.n/mx*100)}%;background:${b.col}"></div></div>
+      <span class="age-count">${b.n}</span></div>`).join('');
+}
+
+function renderStatusByYear(){
+  const years = YEARS.slice(); // already newest-first
+  document.getElementById('yst-rows').innerHTML = years.map(yr=>{
+    const rows = ALL.filter(p=>p.year===yr);
+    const d = rows.filter(p=>p.status==='Completed').length;
+    const o = rows.filter(p=>p.status==='Ongoing').length;
+    const u = rows.filter(p=>p.status==='Unknown').length;
+    const t = d+o+u||1;
+    return `<div class="yst-row" title="${yr}: ${d} completed, ${o} ongoing, ${u} unknown">
+      <span class="yst-yr">${yr}</span>
+      <div class="yst-bar">
+        <div class="yst-seg" style="flex:${d};background:${C.blue}"></div>
+        <div class="yst-seg" style="flex:${o};background:${C.green2}"></div>
+        <div class="yst-seg" style="flex:${u};background:${C.slate}"></div>
+      </div>
+      <span class="yst-tot">${t}</span></div>`;
+  }).join('');
+  document.getElementById('yst-legend').innerHTML = `
+    <span class="leg-item"><span class="leg-dot" style="background:${C.blue}"></span>Completed</span>
+    <span class="leg-item"><span class="leg-dot" style="background:${C.green2}"></span>Ongoing</span>
+    <span class="leg-item"><span class="leg-dot" style="background:${C.slate}"></span>Unknown</span>`;
 }
 
 // ── SDG ───────────────────────────────────────────────────────
